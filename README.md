@@ -2,4 +2,8 @@
 
 # Leaning Nodejs + Express
 
-- Basic Practicing || Exprementing
+- Basic Practicing || Experimenting
+
+```js
+npm run dev
+```
