@@ -187,9 +187,16 @@ app.post('/data', (req, res) => {
     res.send(data)
 });
 
+
+
+
+// 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+// 🟢🟢🟢 example of :- app.get() method with req property
+// 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+
 // http://localhost:3000/info
 app.get('/info', (req, res) => {
-    // server read - user sended data form req.body property
+    // req properties...
     const data1 = req.hostname;
     const data2 = req.ip;
     const data3 = req.ips;
@@ -199,11 +206,8 @@ app.get('/info', (req, res) => {
     const data7 = req.protocol; // http or https
     const data8 = req.secure; // true or false
     const data9 = req.route; // return route object
-    
-    // methods...
-    // client side accepts, which kind of content type?
-    const data10 = req.accepts(); // return array of accepted content types
-    res.send(data10)
+
+    res.send(data1);
 });
 
 // http://localhost:3000/info/10
@@ -211,3 +215,46 @@ app.get('/info/:userId', (req, res) => {
     const data = req.route; // return route related internal info
     res.send(data)
 });
+
+
+// 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+// 🟢🟢🟢 example of :- app.get() method with req methods00
+// 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+
+// http://localhost:3000/info/10
+app.get('/type', (req, res) => {
+    // req methods...
+    // client side accepts, which kind of content type?
+    if (req.accepts('html')) {
+        res.send("<h1>Hello HTML</h1>")
+    } else if (req.accepts('json')) {
+        res.send({ message: 'Hello JSON' })
+    } else if (req.accepts('xml')) {
+        res.send("<message>Hello XML</message>")
+    } else {
+        res.send("Content type not supported.")
+    }
+});
+
+// to get request heder info
+// http://localhost:3000/headers
+app.get('/headers', (req, res) => {
+    const data1 = req.headers; // full server information...
+    const data2 = req.header('user-agent'); // get specific header info
+    const data3 = req.get('accept'); // get specific header info
+    res.send(data3)
+});
+
+
+
+// server can check the content type of request body data that come by POST method
+// http://localhost:3000/data-type
+app.post('/data-type', (req, res) => {
+    if (req.is('application/json')) {
+        res.send("Valid JSON Data")
+    } else if (req.is('text/html')) {
+        res.send("HTML Data")
+    } else {
+        res.status(400).send("Unsupported Content-Type.")
+    }
+})
