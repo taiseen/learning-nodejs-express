@@ -6,6 +6,14 @@ const serverListener = () => console.log(`🚀 Server is running on http://local
 app.listen(3000, serverListener);
 
 
+// 🔴🔴🔴 for POST, PUT, PATCH, DELETE request body data
+// express.json() middleware is used to parse:-
+// raw data >> into >> JSON data, from the request body
+app.use(express.json());
+// for process form data
+app.use(express.urlencoded({ extended: false }));
+
+
 
 app.set('view engine', 'ejs'); // template engine 
 
@@ -164,4 +172,42 @@ app.get('/check', (_, res) => {
 
     const resHeader = res.get('taiseen'); // get the custom header value
     console.log({ resHeader });
+});
+
+
+// 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+// 🟢🟢🟢 example of :- app.post() method
+// 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+
+// http://localhost:3000/data
+// send the request body as response
+app.post('/data', (req, res) => {
+    // server read - user sended data form req.body property
+    const data = req.body;
+    res.send(data)
+});
+
+// http://localhost:3000/info
+app.get('/info', (req, res) => {
+    // server read - user sended data form req.body property
+    const data1 = req.hostname;
+    const data2 = req.ip;
+    const data3 = req.ips;
+    const data4 = req.method
+    const data5 = req.originalUrl;
+    const data6 = req.path; // only return route name
+    const data7 = req.protocol; // http or https
+    const data8 = req.secure; // true or false
+    const data9 = req.route; // return route object
+    
+    // methods...
+    // client side accepts, which kind of content type?
+    const data10 = req.accepts(); // return array of accepted content types
+    res.send(data10)
+});
+
+// http://localhost:3000/info/10
+app.get('/info/:userId', (req, res) => {
+    const data = req.route; // return route related internal info
+    res.send(data)
 });
