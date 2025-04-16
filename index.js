@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -258,3 +258,37 @@ app.post('/data-type', (req, res) => {
         res.status(400).send("Unsupported Content-Type.")
     }
 })
+
+
+
+// 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+// 🟢🟢🟢 example of :- app.get() method with req methods00
+// 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+
+// http://localhost:3000/ejs
+app.get('/ejs', (req, res) => {
+    res.render('home');
+});
+
+// http://localhost:3000/ejs/10
+app.get('/ejs/:userId', (req, res) => {
+    const userId = req.params.userId; // get route parameter value
+
+    const items = ['Apple', 'Banana', 'Cherry',
+        'Date', 'Elderberry', 'Fig', 'Grape'];
+
+    const users = [
+        { name: 'Akshay Kumar', age: 25, city: 'Delhi' },
+        { name: 'Salman Khan', age: 24, city: 'Mumbai' },
+        { name: 'Shahid Kapoor', age: 23, city: 'Goa' },
+        { name: 'John Abraham', age: 22, city: 'Delhi' },
+        { name: 'Kartrina Kaif', age: 23, city: 'Agra' }
+    ];
+
+    res.render('dynamicValue', {
+        items,
+        users,
+        userId,
+        sms: '',
+    });
+});

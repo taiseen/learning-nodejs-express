@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title><%= userId %></title>
+  </head>
+
+  <body>
+  
+    <% if (sms) { %>
+    <h1><%= sms %></h1>
+    <% } else { %>
+    <h1>No data</h1>
+    <% } %>
+
+
+    <h1>Dynamic Value Page</h1>
+    <p>My user id is <%= userId %></p>
+
+
+    <br />
+
+
+    <!-- % const items = ['Apple', 'Banana', 'Cherry' ] %> -->
+
+
+    <ul>
+      <% items.forEach(item => { %>
+      <li><%= item _%></li>
+      <% }) %>
+    </ul>
+
+
+    <br />
+
+
+    <table border="1" width="500px">
+      <% users.forEach(obj => { %>
+      <tr>
+        <td><%= obj.name %></td>
+        <td><%= obj.age %></td>
+        <td><%= obj.city %></td>
+      </tr>
+      <% }) %>
+    </table>
+  </body>
+</html>
