@@ -262,7 +262,7 @@ app.post('/data-type', (req, res) => {
 
 
 // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
-// 🟢🟢🟢 example of :- app.get() method with req methods00
+// 🟢🟢🟢 example of :- app.get() method with req methods
 // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
 
 // http://localhost:3000/ejs
@@ -291,4 +291,19 @@ app.get('/ejs/:userId', (req, res) => {
         userId,
         sms: '',
     });
+});
+
+
+
+// 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+// 🟢🟢🟢 example of :- app.get() & .post() method with res.render() for EJS 
+// 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+
+app.get('/form', (req, res) => {
+    res.render('form', { message: '' });
+});
+
+app.post('/submit', (req, res) => {
+    const name = req.body.userName;
+    res.render('form', { message: name });
 });
