@@ -25,7 +25,13 @@
         <br />
         <br />
 
-        <p>Name: <%= message %></p>
+        <p>
+          Name: <% if (message) { %>
+          <span><%= message %></span>
+          <% } else { %>
+          <span>No Name</span>
+          <% } %>
+        </p>
       </form>
     </div>
   </body>
