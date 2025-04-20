@@ -7,3 +7,10 @@
 ```js
 npm run dev
 ```
+
+## Learning Context:-
+
+- request property & methods
+- response property & methods
+- app.use() - for get user sended data parse by middleware
+- ejs template usage
