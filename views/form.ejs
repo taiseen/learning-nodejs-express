@@ -1,38 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Form</title>
-  </head>
-  <body>
-    <h1>Form Page</h1>
+<%- include('footer') %>
+<h1>Form Page</h1>
 
-    <div>
-      <form action="/submit" method="POST">
-        <input
-          type="text"
-          name="userName"
-          placeholder="Enter your name"
-          required
-        />
+<div>
+  <form action="/submit" method="POST">
+    <input type="text" name="userName" placeholder="Enter your name" required />
 
-        <br />
-        <br />
+    <br />
+    <br />
 
-        <input type="submit" value="Submit" />
+    <input type="submit" value="Submit" />
 
-        <br />
-        <br />
+    <br />
+    <br />
 
-        <p>
-          Name: <% if (message) { %>
-          <span><%= message %></span>
-          <% } else { %>
-          <span>No Name</span>
-          <% } %>
-        </p>
-      </form>
-    </div>
-  </body>
-</html>
+    <p>
+      Name: <% if (message) { %>
+      <span><%= message %></span>
+      <% } else { %>
+      <span>No Name</span>
+      <% } %>
+    </p>
+  </form>
+</div>
+
+<%- include('footer') %>

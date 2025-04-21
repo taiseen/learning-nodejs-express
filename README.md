@@ -14,3 +14,6 @@ npm run dev
 - response property & methods
 - app.use() - for get user sended data parse by middleware
 - ejs template usage
+  - ui
+  - partial
+  
