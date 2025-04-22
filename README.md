@@ -15,5 +15,5 @@ npm run dev
 - app.use() - for get user sended data parse by middleware
 - ejs template usage
   - ui
-  - partial
+  - partial (reuse common file - a systemic way)
   
