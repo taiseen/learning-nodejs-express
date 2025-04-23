@@ -13,7 +13,7 @@ app.use(express.json());
 // for process form data
 app.use(express.urlencoded({ extended: false }));
 
-
+app.use(express.static('public')); // static files
 
 app.set('view engine', 'ejs'); // template engine 
 

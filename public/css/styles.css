@@ -1,0 +1,9 @@
+body {
+    background-color: lightblue;
+}
+
+.form-container {
+    display: flex;
+    gap: 2px;
+    background-color: tomato;
+}

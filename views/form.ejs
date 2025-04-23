@@ -1,7 +1,14 @@
 <%- include('footer') %>
 <h1>Form Page</h1>
 
-<div>
+<div
+  style="
+    display: flex;
+    justify-content: space-around;
+    border: 1px solid brown;
+    padding: 2px;
+  "
+>
   <form action="/submit" method="POST">
     <input type="text" name="userName" placeholder="Enter your name" required />
 
@@ -21,6 +28,10 @@
       <% } %>
     </p>
   </form>
+
+  <div>
+    <img src="img/t.png" alt="logo" style="width: 150px;" />
+  </div>
 </div>
 
 <%- include('footer') %>
