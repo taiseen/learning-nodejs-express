@@ -6,7 +6,7 @@ const contactSchema = new mongoose.Schema({
     last_name: { type: String },
     email: { type: String },
     phone: { type: String },
-    address: { type: String }
+    address: { type: String, trim: true },
 })
 
 // schema for contact collection...

@@ -60,6 +60,7 @@
                       title="Delete"
                       href="/delete-contact/<%= contact._id %>"
                       class="btn btn-sm btn-circle btn-outline-danger"
+                      onclick="return confirm('Delete this contact?')"
                     >
                       <i class="fa fa-times"></i>
                     </a>
@@ -68,7 +69,6 @@
                 <% }); %>
               </tbody>
             </table>
-
           </div>
         </div>
       </div>
