@@ -1,5 +1,11 @@
+import ContactsDB from './models/contacts.models.js';
+import mongoose from 'mongoose';
 import express from 'express';
+
 const app = express();
+
+mongoose.connect('mongodb://localhost:27017/contact-crud-app')
+    .then(() => console.log('MongoDB connected'));
 
 
 // Middlewares...
@@ -11,19 +17,33 @@ app.set('view engine', 'ejs'); // template engine
 
 
 // Routes
-app.get('/', (req, res) => { res.render('home') })
+app.get('/', async (req, res) => {
+    // get all contacts from db
+    const contacts = await ContactsDB.find()
+    res.render('home', { contacts });
+})
 
-app.get('/show-contact', (req, res) => { res.render('show-contact') })
 
 app.get('/add-contact', (req, res) => { res.render('add-contact') })
 
+
 app.post('/add-contact', (req, res) => { })
 
-app.get('/update-contact', (req, res) => { res.render('update-contact') })
 
-app.post('/update-contact', (req, res) => { })
+app.get('/show-contact/:id', async (req, res) => {
+    const id = req.params.id;
+    const contact = await ContactsDB.findById(id); // mongoose method
+    res.render('show-contact', { contact });
+})
 
-app.get('/delete-contact', (req, res) => { })
+
+app.get('/update-contact/:id', (req, res) => { res.render('update-contact') })
+
+
+app.post('/update-contact/:id', (req, res) => { })
+
+
+app.get('/delete-contact/:id', (req, res) => { })
 
 
 

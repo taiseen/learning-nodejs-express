@@ -32,9 +32,9 @@
               </thead>
 
               <tbody>
-                <% var srno = counter %> <% contacts.forEach(contact => { %>
+                <% contacts.forEach(contact => { %>
                 <tr>
-                  <td><%= srno++ %></td>
+                  <td>1</td>
                   <td><%= contact.first_name %></td>
                   <td><%= contact.last_name %></td>
                   <td><%= contact.email %></td>
@@ -69,30 +69,6 @@
               </tbody>
             </table>
 
-            <nav>
-              <ul class="pagination justify-content-center">
-                <% let disableClass = hasPrevPage ? "" : "disabled" %>
-
-                <li class="page-item <%= disableClass %>">
-                  <a class="page-link" href="/?page=<%= prevPage %>">
-                    Previous
-                  </a>
-                </li>
-
-                <% for(let i=1; i <= totalPages; i++){ let activeClass =
-                currentPage == i ? "active" : "" %>
-
-                <li class="page-item <%= activeClass %>">
-                  <a class="page-link" href="/?page=<%= i %>"> <%= i %> </a>
-                </li>
-
-                <% } %> <% let disableClass2 = hasNextPage ? "" : "disabled" %>
-
-                <li class="page-item <%= disableClass2 %>">
-                  <a class="page-link" href="/?page=<%= nextPage %>">Next</a>
-                </li>
-              </ul>
-            </nav>
           </div>
         </div>
       </div>
