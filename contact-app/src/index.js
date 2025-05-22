@@ -3,6 +3,7 @@ import ConnectDB from './config/database.js';
 import express from 'express';
 import path from 'path';
 import url from 'url';
+import { globalErrorHandler } from './error/index.js';
 
 const app = express();
 
@@ -22,7 +23,7 @@ app.set('views', path.join(__dirname, 'views'));
 // Routes... middleware...
 app.use("/", ContactRoutes);
 
-
+app.use(globalErrorHandler);
 
 const PORT = process.env.PORT || 8090;
 const serverListener = () => {

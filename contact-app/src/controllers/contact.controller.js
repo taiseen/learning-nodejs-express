@@ -1,46 +1,78 @@
+import { asyncHandler, isValidObjectId, renderError } from '../helper/index.js';
 import ContactsDB from '../models/contacts.models.js';
 
 
-export const getAllContacts = async (_, res) => {
-    const contacts = await ContactsDB.find() // find all contacts from DB
-    res.render('home', { contacts });
-}
+// Get all contacts
+export const getAllContacts = asyncHandler(async (_, res) => {
+    const contacts = await ContactsDB.find();
+    return res.render('home', { contacts });
+});
 
 
-export const addContactPage = (_, res) => { res.render('add-contact') }
+// Render add contact page
+export const addContactPage = (_, res) => res.render('add-contact');
 
 
-export const addContact = async (req, res) => {
-    const formInputData = req.body;
-    await ContactsDB.create(formInputData); // mongoose method
-    res.redirect('/');
-}
+// Add a contact
+export const addContact = asyncHandler(async (req, res) => {
+    const data = req.body;
+
+    if (!data || Object.keys(data).length === 0)
+        return renderError(res, 400, '400', 'No data provided.');
+
+    await ContactsDB.create(data);
+    return res.redirect('/');
+});
 
 
-export const getContact = async (req, res) => {
-    const userId = req.params.id;
-    const contact = await ContactsDB.findById(userId); // mongoose method
-    res.render('show-contact', { contact });
-}
+// Get a single contact
+export const getContact = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+
+    if (!isValidObjectId(id)) return renderError(res, 404, '404', 'Invalid contact ID.');
+
+    const contact = await ContactsDB.findById(id);
+    if (!contact) return renderError(res, 404, '404', 'Contact not found.');
+
+    return res.render('show-contact', { contact });
+});
 
 
-export const updateContactPage = async (req, res) => {
-    const userId = req.params.id;
-    const contact = await ContactsDB.findById(userId);
-    res.render('update-contact', { contact })
-}
+// Render update contact page
+export const updateContactPage = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+
+    if (!isValidObjectId(id)) return renderError(res, 404, '404', 'Invalid contact ID.');
+
+    const contact = await ContactsDB.findById(id);
+    if (!contact) return renderError(res, 404, '404', 'Contact not found.');
+
+    return res.render('update-contact', { contact });
+});
 
 
-export const updateContact = async (req, res) => {
-    const userId = req.params.id;
+// Update a contact
+export const updateContact = asyncHandler(async (req, res) => {
+    const id = req.params.id;
     const updatedData = req.body;
-    await ContactsDB.findByIdAndUpdate(userId, updatedData);
-    res.redirect('/');
-}
+
+    if (!isValidObjectId(id)) return renderError(res, 404, '404', 'Invalid contact ID.');
+
+    const contact = await ContactsDB.findByIdAndUpdate(id, updatedData, { new: true });
+    if (!contact) return renderError(res, 404, '404', 'Contact not found for update.');
+
+    return res.redirect('/');
+});
 
 
-export const deleteContact = async (req, res) => {
-    const userId = req.params.id;
-    await ContactsDB.findByIdAndDelete(userId);
-    res.redirect('/');
-}
+// Delete a contact
+export const deleteContact = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+
+    if (!isValidObjectId(id)) return renderError(res, 404, '404', 'Invalid contact ID.');
+
+    const contact = await ContactsDB.findByIdAndDelete(id);
+    if (!contact) return renderError(res, 404, '404', 'Contact not found to delete.');
+
+    return res.redirect('/');
+});
