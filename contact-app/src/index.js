@@ -14,6 +14,15 @@ const __dirname = path.dirname(__filename);
 
 
 
+// Types of Middleware in Express.js
+// 1· Built-in            Middleware
+// 2· Application-Level   Middleware
+// 3· Router-Level        Middleware
+// 4· Error-handling      Middleware
+// 5· Third-Party         Middleware
+
+
+
 // Built-in Middlewares...
 app.use(express.urlencoded({ extended: false })); // for process html form input data (req.body)
 app.use(express.static('public')); // static files
