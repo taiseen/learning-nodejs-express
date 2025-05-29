@@ -12,6 +12,10 @@ import {
 
 const router = express.Router();
 
+router.use((req, res, next) => {
+    console.log('🚦- Router Level Middleware for - contact routes');
+    next();
+});
 
 router.get('/', getAllContacts);
 
