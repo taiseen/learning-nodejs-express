@@ -3,9 +3,32 @@ import ContactsDB from '../models/contacts.models.js';
 
 
 // Get all contacts
-export const getAllContacts = asyncHandler(async (_, res) => {
-    const contacts = await ContactsDB.find();
-    return res.render('home', { contacts });
+export const getAllContacts = asyncHandler(async (req, res) => {
+    // const contacts = await ContactsDB.find();
+    // return res.render('home', { contacts });
+
+    const { page = 1, limit = 5 } = req.query;
+
+    const options = {
+        page: parseInt(page),
+        limit: parseInt(limit),
+    };
+
+    const result = await ContactsDB.paginate({}, options);
+
+    return res.render('home', {
+        totalDocs: result.totalDocs,
+        limit: result.limit,
+        totalPages: result.totalPages,
+        currentPage: result.page,
+        counter: result.pagingCounter,
+        hasPrevPage: result.hasPrevPage,
+        hasNextPage: result.hasNextPage,
+        prevPage: result.prevPage,
+        nextPage: result.nextPage,
+        contacts: result.docs, // data 
+    });
+
 });
 
 
