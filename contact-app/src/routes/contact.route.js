@@ -10,24 +10,30 @@ import {
 } from '../controllers/contact.controller.js';
 
 
-const router = express.Router();
+const contactRouter = express.Router();
 
-router.use((req, res, next) => {
+contactRouter.use((req, res, next) => {
+    const url = req.url;
+    const method = req.method;
+
+    console.log({ url });
+    console.log({ method });
+
     console.log('🚦- Router Level Middleware for - contact routes');
     next();
 });
 
-router.get('/', getAllContacts);
+contactRouter.get('/', getAllContacts);
 
-router.get('/add-contact', addContactPage);
-router.post('/add-contact', addContact); // its auto run when user submit the form...
+contactRouter.get('/add-contact', addContactPage);
+contactRouter.post('/add-contact', addContact); // its auto run when user submit the form...
 
-router.get('/show-contact/:id', getContact);
+contactRouter.get('/show-contact/:id', getContact);
 
-router.get('/update-contact/:id', updateContactPage);
-router.post('/update-contact/:id', updateContact);
+contactRouter.get('/update-contact/:id', updateContactPage);
+contactRouter.post('/update-contact/:id', updateContact);
 
-router.get('/delete-contact/:id', deleteContact);
+contactRouter.get('/delete-contact/:id', deleteContact);
 
 
-export default router;
+export default contactRouter;
