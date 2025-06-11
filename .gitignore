@@ -2,3 +2,9 @@
 
 *package-lock.json
 *yarn.lock
+
+*.jpg
+*.png
+*.gif
+*.pdf
+*.jpeg
