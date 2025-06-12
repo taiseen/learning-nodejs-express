@@ -4,6 +4,7 @@ import express from 'express';
 import path from 'path';
 import cors from 'cors';
 import url from 'url';
+import { MulterError } from 'multer';
 
 
 const __filename = url.fileURLToPath(import.meta.url);
@@ -23,6 +24,23 @@ app.use('/api/students', studentRoutes)
 
 
 app.use('/', (_, res) => res.send('crud api v1'));
+
+
+
+app.use((error, req, res, next) => {
+
+    if (error) {
+        console.log('🔴 Server Error:', error.message);
+
+        return res.status(500).json({
+            success: false,
+            message: error.message || 'Something went wrong'
+        });
+    }
+
+    next();
+});
+
 
 
 const PORT = process.env.PORT;

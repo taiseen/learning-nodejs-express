@@ -132,17 +132,30 @@ async function addNewStudent(e) {
 
     const formData = new FormData(this);
 
-    const res = await fetch(apiUrl, {
-        method: "POST",
-        body: formData,
-    });
+    try {
+        const res = await fetch(apiUrl, {
+            method: "POST",
+            body: formData,
+        });
 
-    if (res.ok) {
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.message || 'Failed to create student');
+        }
+
+        // Success case
         this.reset();
+        const fileInput = this.querySelector('input[type="file"]');
+        if (fileInput) fileInput.value = '';
+
+        // mole auto close
         bootstrap.Modal.getInstance(addStudentModal).hide();
-        fetchStudents();
-    } else {
-        alert("Error creating student.");
+        fetchStudents(); // refetch new data...
+
+    } catch (error) {
+        console.error('🔴 Error:', error);
+        alert(error.message || 'An error occurred while creating student');
     }
 }
 
@@ -262,3 +275,17 @@ function renderPagination(totalPages) {
     }
     container.appendChild(nextLi);
 }
+
+
+
+// Reset form when modal closes
+addStudentModal.addEventListener('hidden.bs.modal', function () {
+    // Reset the form
+    addStudentForm.reset();
+
+    // Reset file input
+    const fileInput = addStudentForm.querySelector('input[type="file"]');
+    if (fileInput) {
+        fileInput.value = '';
+    }
+});

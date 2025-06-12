@@ -7,13 +7,13 @@ const storage = multer.diskStorage({
 
     destination: (req, file, cb) => {
         // console.log('✅✅✅ File upload location...');
-        
+
         cb(null, './src/uploads')
     },
 
     filename: (req, file, cb) => {
         // console.log('✅✅✅ File Renaming...');
-        
+
         const newFileName = Date.now() + path.extname(file.originalname);
 
         cb(null, newFileName)
@@ -27,10 +27,20 @@ const fileFilter = (req, file, cb) => {
     // console.log('🟢🟢🟢 File Type Info :- ');
     // console.log(file);
 
-    if (file.mimetype.startsWith('image/')) {
-        cb(null, true)
+    // if (file.mimetype.startsWith('image/')) {
+    //     cb(null, true)
+    // } else {
+    //     cb(new Error('Only images are allowed!'), false)
+    // }
+
+    const fileTypes = /jpeg|jpg/;
+    const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = fileTypes.test(file.mimetype);
+
+    if (extname && mimetype) {
+        return cb(null, true);
     } else {
-        cb(new Error('Only images are allowed!'), false)
+        cb(new Error('Only images (jpeg, jpg) are allowed.'), false);
     }
 }
 
