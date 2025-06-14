@@ -3,7 +3,7 @@ const defaultImgUrl =
 
 
 const baseUrl = "http://localhost:3000";
-const apiUrl = `${baseUrl}/api/students`;
+const apiUrl = `${baseUrl}/api/student`;
 const imgUrl = `${baseUrl}/uploads/`;
 
 
@@ -20,25 +20,37 @@ const editStudentForm = document.querySelector("#editStudentForm");
 const editStudentModal = document.querySelector("#editStudentModal");
 
 
+function checkAuth() {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        window.location.href = "index.html";
+    }
+
+    return {
+        'Authorization': `Bearer ${token}`
+    }
+}
+
+const headers = checkAuth();
+
+
 // View All Students
 // 🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐
 // 🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐
 // 🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐
 async function fetchStudents(search = "", pageNumber = 1) {
-    try {
-        currentPage = pageNumber;
-        currentSearch = search;
+    currentPage = pageNumber;
+    currentSearch = search;
 
+    try {
         const res = await fetch(
             `${apiUrl}?search=${encodeURIComponent(search)}&page=${pageNumber}&limit=${limit}`,
-            {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Add auth token
-                }
-            }
+            { headers }
+            // if this header - token match with server, then we can access this api endpoint...
+            // otherwise we cant get access this data... its one kind of key-lock || security...
         );
 
-        // Check if response is ok (status 200-299)
         if (!res.ok) {
             const errorData = await res.json();
             throw new Error(errorData.message || 'Failed to fetch students');
@@ -90,13 +102,9 @@ async function fetchStudents(search = "", pageNumber = 1) {
         renderPagination(data.totalPage);
 
     } catch (error) {
-        console.error('Error fetching students:', error);
+        console.error('🔴 Error fetching students:', error);
         alert(`Error: ${error.message}`);
-
-        // If unauthorized (401), redirect to login
-        if (error.message.includes('Unauthorized') || error.message.includes('401')) {
-            window.location.href = '/login.html';
-        }
+        logout();
     }
 }
 
@@ -115,7 +123,7 @@ async function viewStudent(id) {
     const viewProfilePic = document.querySelector("#viewProfilePic");
     const viewStudentModal = document.querySelector("#viewStudentModal");
 
-    const res = await fetch(`${apiUrl}/${id}`);
+    const res = await fetch(`${apiUrl}/${id}`, { headers });
     const student = await res.json();
 
     const imgUrlPath = student.profile_pic
@@ -157,6 +165,7 @@ async function addNewStudent(e) {
         const res = await fetch(apiUrl, {
             method: "POST",
             body: formData,
+            headers,
         });
 
         const data = await res.json();
@@ -188,7 +197,7 @@ addStudentForm.addEventListener("submit", addNewStudent);
 // 🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐
 // 🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐
 async function editStudent(id) {
-    const res = await fetch(`${apiUrl}/${id}`);
+    const res = await fetch(`${apiUrl}/${id}`, { headers });
     const student = await res.json();
 
     document.querySelector("#editStudentId").value = student._id;
@@ -216,6 +225,7 @@ async function updateStudentInfo(e) {
     const res = await fetch(`${apiUrl}/${id}`, {
         method: "PUT",
         body: formData,
+        headers,
     });
 
     if (res.ok) {
@@ -235,7 +245,7 @@ editStudentForm.addEventListener("submit", updateStudentInfo);
 // 💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥
 async function deleteStudent(id) {
     if (confirm("Are you sure to delete this student ?")) {
-        await fetch(`${apiUrl}/${id}`, { method: "DELETE" });
+        await fetch(`${apiUrl}/${id}`, { method: "DELETE", headers });
         fetchStudents();
     }
 }
@@ -310,3 +320,11 @@ addStudentModal.addEventListener('hidden.bs.modal', function () {
         fileInput.value = '';
     }
 });
+
+
+
+
+function logout() {
+    localStorage.removeItem("token")
+    window.location.href = "index.html"
+}

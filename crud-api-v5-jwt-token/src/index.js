@@ -1,5 +1,6 @@
 import dbConnection from './connection/dbConnection.js';
 import studentRoutes from './routes/student.routes.js';
+import routeNotFound from './utils/routeNotFound.js';
 import userRoutes from './routes/user.routes.js';
 import authGard from './middleware/auth.js';
 import express from 'express';
@@ -25,11 +26,11 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/user', userRoutes);
 
 // app.use();
-app.use('/api/students', authGard, studentRoutes);
+app.use('/api/student', authGard, studentRoutes);
 
 
 
-app.use('/', (_, res) => res.send('crud api v5'));
+app.use('/', routeNotFound);
 
 
 
