@@ -3,7 +3,9 @@ import studentRoutes from './routes/student.routes.js';
 import routeNotFound from './utils/routeNotFound.js';
 import userRoutes from './routes/user.routes.js';
 import authGard from './middleware/auth.js';
+import limiter from './utils/rateLimit.js';
 import express from 'express';
+import helmet from 'helmet';
 import path from 'path';
 import cors from 'cors';
 import url from 'url';
@@ -18,10 +20,13 @@ const app = express();
 
 
 app.use(cors());
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(helmet());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+
+app.use(limiter);
 
 app.use('/api/user', userRoutes);
 

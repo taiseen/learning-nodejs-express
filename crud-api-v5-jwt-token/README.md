@@ -1,4 +1,4 @@
-> 11 - June - 2025
+> 14 - June - 2025
 
 ## CRUD API - Img Uploading
 
@@ -23,4 +23,8 @@
 
 ## Output
 
-<img src="./ui/crud-api-v4-pagination.png" alt="output" />
+<div align="center">
+  <img src="./ui/crud-api-v5-jwt-token-1.png" alt="output" />
+</div>
+
+<img src="./ui/crud-api-v5-jwt-token-2.png" alt="output" />
