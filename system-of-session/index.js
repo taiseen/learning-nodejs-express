@@ -1,6 +1,13 @@
 import expressSession from 'express-session';
 // import mongoStore from 'connect-mongo';
 import express from 'express';
+import {
+    getSessionAboutPage,
+    getSessionGetPage,
+    destroySession,
+    getUserName,
+    setSession
+} from './controllers';
 
 
 const app = express();
@@ -19,60 +26,15 @@ app.use(expressSession({
 }))
 
 
+app.get('/', getUserName);
 
-app.get('/', (req, res) => {
+app.get('/set', setSession);
 
-    req.session.userName
-        ? res.send(`<h1>Username from session is : ${req.session.userName}</h1>`)
-        : res.send('<h1>No username found in session.</h1>');
-});
+app.get('/get', getSessionGetPage);
 
+app.get('/about', getSessionAboutPage);
 
-
-app.get('/set', (req, res) => {
-
-    // ✅✅✅ session created here...
-    // & session is temporary data that stored in memory. 
-    // if server restart then session will be lost.
-    // so we need to store session in database.
-    // by this session we can track/check user in other routes...
-    req.session.userName = "Taiseen"; // you can set any value here.
-
-    res.send('<h1>Username has been set in session.</h1>');
-});
-
-
-
-app.get('/get', (req, res) => {
-
-    req.session.userName
-        ? res.send(`<h1>Username from session is : ${req.session.userName}</h1>`)
-        : res.send('<h1>No username found in session.</h1>');
-});
-
-
-
-app.get('/about', (req, res) => {
-
-    req.session.userName
-        ? res.send(`<h1>Username from session is : ${req.session.userName}</h1>`)
-        : res.send('<h1>No username found in session.</h1>');
-});
-
-
-
-app.get('/destroy', (req, res) => {
-
-    req.session.destroy((err) => {
-
-        if (err) {
-            res.status(500).send('Failed to destroy session... ' + err.message);
-        }
-
-        res.send('<h1>Session destroy successfully.</h1>');
-    })
-});
-
+app.get('/destroy', destroySession);
 
 
 const PORT = process.env.PORT || 3000;
