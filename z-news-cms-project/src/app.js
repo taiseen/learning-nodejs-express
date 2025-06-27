@@ -1,8 +1,9 @@
+import frontendRoutes from './routes/frontend.routes.js';
+import adminRoutes from './routes/admin.routes.js';
 import expressLayouts from 'express-ejs-layouts';
 import express from 'express';
 import path from 'path';
 import url from 'url';
-
 
 const app = express();
 
@@ -19,6 +20,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('layouts', 'layouts');
 app.set('view engine', 'ejs');
 
+
+app.use('/', frontendRoutes);
+app.use('/admin', adminRoutes);
 
 
 
