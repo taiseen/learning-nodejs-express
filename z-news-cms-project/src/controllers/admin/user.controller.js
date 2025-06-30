@@ -1,54 +1,44 @@
 
 const loginPage = (req, res) => {
-    console.log('🟢🟢🟢 Login Page');
-    res.render('login', { error: null });
+    res.render('admin/login', { layout: false });
 }
 
-const adminLogin = (req, res) => {
-    res.redirect('/dashboard');
-}
+const adminLogin = (req, res) => { }
 
-const logout = (req, res) => {
-    req.session.destroy();
-    res.redirect('/');
-}
+const logout = (req, res) => {}
 
 const dashboard = (req, res) => {
-    res.render('dashboard');
+     res.render('admin/dashboard');
 }
 
 const settings = (req, res) => {
-    res.render('settings');
+    res.render('admin/settings');
 }
 
-const saveSettings = (req, res) => {
-    res.redirect('/settings');
-}
+const saveSettings = (req, res) => {}
 
 
 const allUser = (req, res) => {
-    res.render('users');
+    res.render('admin/users');
 }
 
 const addUserPage = (req, res) => {
-    res.render('add-user');
+    res.render('admin/users/create');
 }
 
 const addUser = (req, res) => {
-    res.redirect('/users');
+    res.redirect('admin/users');
 }
 
 const updateUserPage = (req, res) => {
-    res.render('update-user');
+    res.render('admin/users/update');
 }
 
 const updateUser = (req, res) => {
     res.redirect('/users');
 }
 
-const deleteUser = (req, res) => {
-    res.redirect('/users');
-}
+const deleteUser = (req, res) => {}
 
 
 // Export all functions as named exports
