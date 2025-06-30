@@ -17,11 +17,18 @@ app.use(expressLayouts);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.set('layouts', 'layouts');
+app.set('layouts', 'layouts'); // for frontend layout
 app.set('view engine', 'ejs');
 
 
 app.use('/', frontendRoutes);
+
+
+app.use('/admin', (req, res, next) => {
+    res.locals.layout = 'admin/layout';
+    next();
+})
+
 app.use('/admin', adminRoutes);
 
 
