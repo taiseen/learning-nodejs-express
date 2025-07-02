@@ -2,6 +2,7 @@ import frontendRoutes from './routes/frontend.routes.js';
 import dbConnection from './connection/dbConnection.js';
 import adminRoutes from './routes/admin.routes.js';
 import expressLayouts from 'express-ejs-layouts';
+import cookieParser from 'cookie-parser';
 import express from 'express';
 import path from 'path';
 import url from 'url';
@@ -13,8 +14,10 @@ const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
+// Middlewares...
 app.use(express.json());
 app.use(expressLayouts);
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 

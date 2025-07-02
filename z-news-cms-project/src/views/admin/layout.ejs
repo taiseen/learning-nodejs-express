@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>ADMIN Panel</title>
-    
+
     <!-- Bootstrap -->
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <!-- Font Awesome Icon -->
@@ -14,7 +14,7 @@
     <!-- Custom stylesheet -->
     <link rel="stylesheet" href="/css/style.css" />
 
-    <%- typeof tabulatorCSS == 'undefined' ? '' : tabulatorCSS %>
+    <%- typeof tabulatorCSS == 'undefined' ? '' : tabulatorCSS %> 
     <%- typeof summernoteCSS == 'undefined' ? '' : summernoteCSS %>
   </head>
 
@@ -56,10 +56,10 @@
               </li>
 
               <li>
-                <a href="/admin/article">Article</a>
+                <a href="/admin/articles">Articles</a>
               </li>
 
-              <!-- if(role === 'admin') {  -->
+              <% if(role === 'admin') { %>
               <li>
                 <a href="/admin/category">Category</a>
               </li>
@@ -67,16 +67,17 @@
               <li>
                 <a href="/admin/users">Users</a>
               </li>
+              <% } %>
 
               <li>
                 <a href="/admin/comments">Comments</a>
               </li>
 
-              <!-- < if(role === 'admin') { > -->
+              <% if(role === 'admin') { %>
               <li>
                 <a href="/admin/settings">Settings</a>
               </li>
-              <!-- < } > -->
+              <% } %>
             </ul>
           </div>
         </div>

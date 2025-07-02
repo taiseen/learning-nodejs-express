@@ -1,6 +1,6 @@
 
 const allComments = (req, res) => {
-    res.render('comments');
+    res.render('admin/comments', { role: req.role });
 }
 
 export { allComments }

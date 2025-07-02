@@ -6,7 +6,11 @@
           <i class="fa fa-cubes"></i>Dashboard |
           <small>Hello <%= fullname %> </small>
         </h1>
+        <% const userRole = role === 'admin' ? 'Admin🛡️' : 'Author📝' %>
+
+        <p class="lead">Role: <%= userRole %></p>
       </div>
+
       <div class="col-md-3">
         <div class="admin-block" style="background-color: #cfe2ff">
           <i class="fa fa-file-text"></i>
@@ -14,6 +18,7 @@
           <h1><%= articleCount %></h1>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="admin-block">
           <i class="fa fa-gears"></i>
@@ -21,7 +26,8 @@
           <h1><%= categoryCount %></h1>
         </div>
       </div>
-      <% if(role == 'admin') { %>
+
+      <% if(role === 'admin') { %>
       <div class="col-md-3">
         <div class="admin-block" style="background-color: #d2f4ea">
           <i class="fa fa-users"></i>
