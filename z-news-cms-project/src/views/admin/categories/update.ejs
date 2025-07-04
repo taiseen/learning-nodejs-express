@@ -11,8 +11,8 @@
             <!-- Form Start -->
             <form
               action="/admin/update-category/<%= category.id %>"
-              method="POST"
               autocomplete="off"
+              method="POST"
             >
               <div class="mb-3">
                 <label for="" class="form-label">Category Name</label>
@@ -25,11 +25,11 @@
                   required
                 />
               </div>
+
               <div class="mb-3">
                 <label for="" class="form-label">Description</label>
                 <textarea name="description" class="form-control">
-<%= category.description %></textarea
-                >
+<%= category.description %></textarea>
               </div>
               <input
                 type="submit"

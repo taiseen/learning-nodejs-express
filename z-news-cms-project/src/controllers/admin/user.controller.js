@@ -94,7 +94,7 @@ const addUserPage = (req, res) => {
 const addUser = async (req, res) => {
     try {
         await UserModel.create(req.body);
-        res.redirect('/admin/users',);
+        res.redirect('/admin/users');
     } catch (error) {
         console.log('addUser:- 🔴', error);
         res.status(500).send('Internal Server Error');
