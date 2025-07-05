@@ -3,6 +3,7 @@ import * as articleController from '../controllers/admin/article.controller.js';
 import * as commentController from '../controllers/admin/comment.controller.js';
 import * as userController from '../controllers/admin/user.controller.js';
 
+import fileUpload from '../middleware/multer.js';
 import isLogIn from '../middleware/isLogin.js';
 import isAdmin from '../middleware/isAdmin.js';
 import express from 'express';
@@ -39,11 +40,11 @@ adminRoutes.delete('/delete-category/:id', isLogIn, isAdmin, categoryController.
 
 // 🟩🟩🟩 Article CRUD Routes
 adminRoutes.get('/articles', isLogIn, articleController.allArticle);
-adminRoutes.get('/articles/new', isLogIn, articleController.addArticlePage);
-adminRoutes.post('/articles', isLogIn, articleController.addArticle); // ⬇️⬇️⬇️
-adminRoutes.get('/articles/:id/edit', isLogIn, articleController.updateArticlePage);
-adminRoutes.post('/articles/:id', isLogIn, articleController.updateArticle); // ⬇️⬇️⬇️
-adminRoutes.delete('/articles/:id', isLogIn, articleController.deleteArticle); // 🗑️🗑️🗑️
+adminRoutes.get('/article/new', isLogIn, articleController.addArticlePage);
+adminRoutes.post('/add-article', fileUpload.single('image'), isLogIn, articleController.addArticle); // ⬇️⬇️⬇️
+adminRoutes.get('/article/:id/edit', isLogIn, articleController.updateArticlePage);
+adminRoutes.post('/article/:id', isLogIn, fileUpload.single('image'), articleController.updateArticle); // ⬇️⬇️⬇️
+adminRoutes.delete('/article/:id', isLogIn, articleController.deleteArticle); // 🗑️🗑️🗑️
 
 
 // 🟩🟩🟩 Comment Routes
