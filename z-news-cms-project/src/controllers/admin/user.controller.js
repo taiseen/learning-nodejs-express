@@ -1,9 +1,9 @@
 import UserModel from "../../models/user.model.js";
+import config from "../../config/index.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import config from "../../config/index.js";
 
-const loginPage = (req, res) => {
+const loginPage = (_, res) => {
     res.render('admin/login', { layout: false });
 }
 

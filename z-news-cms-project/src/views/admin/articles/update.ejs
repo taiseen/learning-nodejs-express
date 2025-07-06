@@ -10,9 +10,9 @@
           <div class="card-body">
             <!-- Form -->
             <form
-              action="/admin/update-article/<%= article.id %>"
-              method="POST"
+              action="/admin/updata-article/<%= article.id %>"
               enctype="multipart/form-data"
+              method="POST"
             >
               <div class="mb-3">
                 <label for="article_title" class="form-label">Title</label>
@@ -26,6 +26,7 @@
                   required
                 />
               </div>
+
               <div class="mb-3">
                 <label for="summernote" class="form-label">Description</label>
                 <textarea
@@ -38,37 +39,44 @@
 <%= article.content %></textarea
                 >
               </div>
+
               <div class="mb-3">
-                <label for="article_category" class="form-label"
-                  >Category</label
-                >
+                <label for="article_category" class="form-label">
+                  Category
+                </label>
+
                 <select
                   name="category"
                   id="article_category"
                   class="form-control"
                 >
-                  <% categories.forEach((category) => { %> <% if
-                  (article.category.id == category.id) { %>
-                  <option value="<%= category.id %>" selected>
-                    <%= category.name %>
-                  </option>
-                  <% } else { %>
-                  <option value="<%= category.id %>">
-                    <%= category.name %>
-                  </option>
-                  <% } %> <% }); %>
+                  <% categories.forEach((category) => { %> 
+                    <% if (article.category.id == category.id) { %>
+                    <option value="<%= category.id %>" selected>
+                      <%= category.name %>
+                    </option>
+                    <% } else { %>
+                    <option value="<%= category.id %>">
+                      <%= category.name %>
+                    </option>
+                    <% } %> 
+                  <% }); %>
                 </select>
               </div>
+
               <div class="mb-3">
-                <label for="article_image" class="form-label"
-                  >Article image</label
-                >
+                <label for="article_image" class="form-label">
+                  Article image
+                </label>
+
                 <br />
+
                 <img
                   src="/uploads/<%= article.image %>"
-                  alt=""
                   class="article-image mb-3 w-25 border border-3 border-primary"
+                  alt="<%= article.image %>"
                 />
+
                 <input
                   type="file"
                   name="image"
@@ -76,11 +84,12 @@
                   class="form-control"
                 />
               </div>
+
               <input
                 type="submit"
                 name="submit"
-                class="btn btn-primary"
                 value="Update"
+                class="btn btn-primary"
               />
             </form>
             <!--/Form -->

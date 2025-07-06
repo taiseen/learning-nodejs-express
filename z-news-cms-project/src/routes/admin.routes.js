@@ -41,10 +41,10 @@ adminRoutes.delete('/delete-category/:id', isLogIn, isAdmin, categoryController.
 // 🟩🟩🟩 Article CRUD Routes
 adminRoutes.get('/articles', isLogIn, articleController.allArticle);
 adminRoutes.get('/article/new', isLogIn, articleController.addArticlePage);
-adminRoutes.post('/add-article', fileUpload.single('image'), isLogIn, articleController.addArticle); // ⬇️⬇️⬇️
+adminRoutes.post('/add-article', isLogIn, fileUpload.single('image'), articleController.addArticle); // ⬇️⬇️⬇️
 adminRoutes.get('/article/:id/edit', isLogIn, articleController.updateArticlePage);
-adminRoutes.post('/article/:id', isLogIn, fileUpload.single('image'), articleController.updateArticle); // ⬇️⬇️⬇️
-adminRoutes.delete('/article/:id', isLogIn, articleController.deleteArticle); // 🗑️🗑️🗑️
+adminRoutes.post('/updata-article/:id', isLogIn, fileUpload.single('image'), articleController.updateArticle); // ⬇️⬇️⬇️
+adminRoutes.delete('/delete-article/:id', isLogIn, articleController.deleteArticle); // 🗑️🗑️🗑️
 
 
 // 🟩🟩🟩 Comment Routes
