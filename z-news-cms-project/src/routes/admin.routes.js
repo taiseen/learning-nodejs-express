@@ -17,7 +17,7 @@ adminRoutes.post('/index', userController.adminLogin); // ⬇️⬇️⬇️
 adminRoutes.get('/logout', isLogIn, userController.logout);
 adminRoutes.get('/dashboard', isLogIn, userController.dashboardPage);
 adminRoutes.get('/settings', isLogIn, isAdmin, userController.settings);
-adminRoutes.post('/save-settings', isLogIn, isAdmin, userController.saveSettings); // ⬇️⬇️⬇️
+adminRoutes.post('/save-settings', isLogIn, isAdmin, fileUpload.single('website_logo'), userController.saveSettings); // ⬇️⬇️⬇️
 
 
 // 🟩🟩🟩 User CRUD Routes

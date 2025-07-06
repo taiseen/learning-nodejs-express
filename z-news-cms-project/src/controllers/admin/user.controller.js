@@ -1,7 +1,10 @@
+import CategoryModel from "../../models/category.model.js";
+import NewsModel from "../../models/news.model.js";
 import UserModel from "../../models/user.model.js";
 import config from "../../config/index.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import SettingModel from "../../models/setting.model.js";
 
 const loginPage = (_, res) => {
     res.render('admin/login', { layout: false });
@@ -56,12 +59,20 @@ const logout = (_, res) => {
 
 const dashboardPage = async (req, res) => {
     try {
+        const categoryCount = await CategoryModel.countDocuments();
+        const userCount = await UserModel.countDocuments();
+
+        // show login user, owen article count number...
+        const articleCount = req.role === 'author'
+            ? await NewsModel.countDocuments({ author: req.id })
+            : await NewsModel.countDocuments();
+
         res.render('admin/dashboard', {
             fullname: req.fullname,
-            articleCount: 10,
-            categoryCount: 3,
             role: req.role,
-            userCount: 5,
+            categoryCount,
+            articleCount,
+            userCount,
         });
     } catch (error) {
         console.log('dashboardPage:- 🔴', error);
@@ -69,9 +80,54 @@ const dashboardPage = async (req, res) => {
     }
 };
 
-const settings = (req, res) => res.render('admin/settings', { role: req.role });
+const settings = async (req, res) => {
+    try {
+        const settings = await SettingModel.findOne()
+        res.render('admin/settings', { role: req.role, settings: settings ?? [] })
+    } catch (error) {
+        console.log('settings:- 🔴', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
-const saveSettings = (req, res) => { }
+
+const saveSettings = async (req, res) => {
+    const { website_title, footer_description } = req.body;
+    const website_logo = req.file?.filename;
+
+    try {
+        let setting = await SettingModel.findOne();
+
+        if (!setting) {
+            setting = new SettingModel();
+        }
+
+        setting.website_title = website_title;
+        setting.footer_description = footer_description;
+
+
+        if (website_logo) {
+            if (setting.website_logo) {
+                const folderPath = path.join(process.cwd(), 'public', 'uploads');
+                const imagePath = path.join(folderPath, article.image);
+
+                if (fs.existsSync(imagePath)) {
+                    fs.unlinkSync(imagePath);
+                }
+            }
+
+            setting.website_logo = website_logo;
+        }
+
+        await setting.save();
+
+        res.redirect('/admin/settings');
+
+    } catch (error) {
+        console.log('saveSettings:- 🔴', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
 
 
 const allUser = async (req, res) => {

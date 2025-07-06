@@ -4,6 +4,8 @@
 
 A comprehensive blog management system with both frontend and admin panel functionalities, built with Node.js, Express, and EJS templates.
 
+#### Server-Side Rendering (SSR) with Template Engine
+
 ## System Architecture
 
 ### Backend System
@@ -13,9 +15,9 @@ A comprehensive blog management system with both frontend and admin panel functi
 - 🗃️ Database connection (MongoDB)
 - 🛡️ Role-based access control
   - Role wise article - read + update + delete
-- 📝 Article management - CRUD
-- 🗂️ Category management - CRUD
-- 👥 User management - CRUD
+- 🗂️ CRUD - Category management
+- 📝 CRUD - Article management
+- 👥 CRUD - User management
 
 ### Frontend System
 
@@ -25,6 +27,25 @@ A comprehensive blog management system with both frontend and admin panel functi
 - 📝 Article management UI
 - 🗂️ Category management UI
 - 👥 User management UI
+
+## Technical Details
+
+### Middlewares
+
+- `express-ejs-layouts` - Layout support for EJS
+- `express.urlencoded` - Parse URL-encoded bodies
+- `express.json()` - Parse JSON requests
+- `express.static` - Serve static files
+- `cookie-parser` - Parse cookies
+- Custom middlewares for authentication `isLogIn`
+- Custom middlewares for authorization `isAdmin`
+- File upload handling with `multer`
+
+### View Engine
+
+- EJS templates with layout support
+- Separate layouts for frontend & admin panel
+- Views organized in hierarchical structure
 
 ## API Endpoints
 
@@ -90,21 +111,3 @@ A comprehensive blog management system with both frontend and admin panel functi
 | Route | Method | Description |
 |-------|--------|-------------|
 | `/admin/comments` | GET | List all comments |
-
-## Technical Details
-
-### Middlewares
-
-- `express.json()` - Parse JSON requests
-- `express-ejs-layouts` - Layout support for EJS
-- `cookie-parser` - Parse cookies
-- `express.urlencoded` - Parse URL-encoded bodies
-- `express.static` - Serve static files
-- Custom middlewares for authentication (`isLogIn`, `isAdmin`)
-- File upload handling with `multer`
-
-### View Engine
-
-- EJS templates with layout support
-- Separate layouts for frontend and admin panel
-- Views organized in hierarchical structure
