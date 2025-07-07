@@ -51,4 +51,41 @@ adminRoutes.delete('/delete-article/:id', isLogIn, articleController.deleteArtic
 adminRoutes.get('/comments', isLogIn, commentController.allComments);
 
 
+
+// 🟥🟥🟥 404 Middleware - for Route related error display...
+adminRoutes.use(isLogIn, (req, res, next) => {
+
+    res.status(404).render('admin/error/404', {
+        message: '🔎 Page Not Found...',
+        role: req.role
+    })
+});
+
+
+
+// 🟥🟥🟥 500 Error Handler - for Server-Coding || DB related error display...
+adminRoutes.use(isLogIn, (error, req, res, next) => {
+
+    console.error('🔴🔴🔴 ' + error.stack);
+
+    const status = error.status || 500;
+
+    const errorEjsTemplate = {
+        401: 'admin/error/401',
+        404: 'admin/error/404',
+        500: 'admin/error/500',
+    };
+
+    const dynamicView = errorEjsTemplate[status] || 'admin/error/500';
+
+    res
+        .status(status)
+        .render(dynamicView, {
+            message: error.message || 'Something went wrong',
+            role: req.role
+        })
+});
+
+
+
 export default adminRoutes;

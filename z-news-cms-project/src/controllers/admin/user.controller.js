@@ -1,16 +1,21 @@
 import CategoryModel from "../../models/category.model.js";
+import SettingModel from "../../models/setting.model.js";
+import createError from "../../utils/createError.js";
 import NewsModel from "../../models/news.model.js";
 import UserModel from "../../models/user.model.js";
 import config from "../../config/index.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import SettingModel from "../../models/setting.model.js";
+
+
 
 const loginPage = (_, res) => {
     res.render('admin/login', { layout: false });
 }
 
-const adminLogin = async (req, res) => {
+
+
+const adminLogin = async (req, res, next) => {
 
     const { username, password } = req.body;
 
@@ -19,14 +24,15 @@ const adminLogin = async (req, res) => {
     };
 
     try {
+
         const user = await UserModel.findOne({ username });
         if (!user) {
-            return res.status(400).json({ message: 'Invalid username & password.' });
+            return next(createError(401, 'Invalid username & password.'));
         }
 
         const isCorrectPassword = await bcrypt.compare(password, user.password);
         if (!isCorrectPassword) {
-            return res.status(400).json({ message: 'Invalid username & password.' });
+            return next(createError(401, 'Invalid username & password.'));
         }
 
         const { _id: id, role, fullname } = user;
@@ -45,10 +51,10 @@ const adminLogin = async (req, res) => {
         res.redirect('/admin/dashboard');
 
     } catch (error) {
-        console.log('adminLogin:- 🔴', error);
-        res.status(500).send('Internal Server Error');
+        next(error);
     }
 }
+
 
 
 const logout = (_, res) => {
@@ -57,8 +63,11 @@ const logout = (_, res) => {
 }
 
 
-const dashboardPage = async (req, res) => {
+
+const dashboardPage = async (req, res, next) => {
+
     try {
+
         const categoryCount = await CategoryModel.countDocuments();
         const userCount = await UserModel.countDocuments();
 
@@ -74,28 +83,36 @@ const dashboardPage = async (req, res) => {
             articleCount,
             userCount,
         });
+
     } catch (error) {
-        console.log('dashboardPage:- 🔴', error);
-        res.status(500).send('Internal Server Error');
+        next(error);
     }
 };
 
-const settings = async (req, res) => {
+
+
+const settings = async (req, res, next) => {
+
     try {
+
         const settings = await SettingModel.findOne()
+
         res.render('admin/settings', { role: req.role, settings: settings ?? [] })
+
     } catch (error) {
-        console.log('settings:- 🔴', error);
-        res.status(500).send('Internal Server Error');
+        next(error);
     }
 };
 
 
-const saveSettings = async (req, res) => {
+
+const saveSettings = async (req, res, next) => {
+
     const { website_title, footer_description } = req.body;
     const website_logo = req.file?.filename;
 
     try {
+
         let setting = await SettingModel.findOne();
 
         if (!setting) {
@@ -124,21 +141,25 @@ const saveSettings = async (req, res) => {
         res.redirect('/admin/settings');
 
     } catch (error) {
-        console.log('saveSettings:- 🔴', error);
-        res.status(500).send('Internal Server Error');
+        next(error);
     }
 }
 
 
-const allUser = async (req, res) => {
+
+const allUser = async (req, res, next) => {
+
     try {
+
         const users = await UserModel.find();
+
         res.render('admin/users', { users, role: req.role });
+
     } catch (error) {
-        console.log('allUser:- 🔴', error);
-        res.status(500).send('Internal Server Error');
+        next(error);
     }
 }
+
 
 
 const addUserPage = (req, res) => {
@@ -147,43 +168,55 @@ const addUserPage = (req, res) => {
 }
 
 
-const addUser = async (req, res) => {
+
+const addUser = async (req, res, next) => {
+
     try {
+
         await UserModel.create(req.body);
+
         res.redirect('/admin/users');
+
     } catch (error) {
-        console.log('addUser:- 🔴', error);
-        res.status(500).send('Internal Server Error');
+        next(error);
     }
 }
 
 
-const updateUserPage = async (req, res) => {
+
+const updateUserPage = async (req, res, next) => {
+
     const id = req.params.id;
 
     try {
+
         const user = await UserModel.findById(id);
+
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return next(createError(404, 'User'));
         }
 
         res.render('admin/users/update', { user, role: req.role });
+
     } catch (error) {
-        console.log('updateUserPage:- 🔴', error);
-        res.status(500).send('Internal Server Error');
+        next(error);
     }
 };
 
 
-const updateUser = async (req, res) => {
+
+const updateUser = async (req, res, next) => {
+
     const id = req.params.id;
 
     const { fullname, role, password } = req.body;
 
     try {
+
         const user = await UserModel.findById(id);
+
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return next(createError(404, 'User'));
         }
 
         user.fullname = fullname || user.fullname;
@@ -195,29 +228,34 @@ const updateUser = async (req, res) => {
         await user.save();
 
         res.redirect('/admin/users');
+
     } catch (error) {
-        console.log('updateUser:- 🔴', error);
-        res.status(500).send('Internal Server Error');
+        next(error);
     }
 
 };
 
 
-const deleteUser = async (req, res) => {
+
+const deleteUser = async (req, res, next) => {
+
     const id = req.params.id;
 
     try {
+
         const user = await UserModel.findByIdAndDelete(id);
+
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return next(createError(404, 'User'));
         }
 
         res.json({ success: true });
+
     } catch (error) {
-        console.log('deleteUser:- 🔴', error);
-        res.status(500).send('Internal Server Error');
+        next(error);
     }
 }
+
 
 
 // Export all functions as named exports
