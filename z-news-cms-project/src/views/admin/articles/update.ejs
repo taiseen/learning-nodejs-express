@@ -50,17 +50,16 @@
                   id="article_category"
                   class="form-control"
                 >
-                  <% categories.forEach((category) => { %> 
-                    <% if (article.category.id == category.id) { %>
-                    <option value="<%= category.id %>" selected>
-                      <%= category.name %>
-                    </option>
-                    <% } else { %>
-                    <option value="<%= category.id %>">
-                      <%= category.name %>
-                    </option>
-                    <% } %> 
-                  <% }); %>
+                  <% categories.forEach((category) => { %> <% if
+                  (article.category.id == category.id) { %>
+                  <option value="<%= category.id %>" selected>
+                    <%= category.name %>
+                  </option>
+                  <% } else { %>
+                  <option value="<%= category.id %>">
+                    <%= category.name %>
+                  </option>
+                  <% } %> <% }); %>
                 </select>
               </div>
 
@@ -93,6 +92,10 @@
               />
             </form>
             <!--/Form -->
+
+            <!-- Error Message -->
+            <%- include('../partials/error') %>
+            <!-- /Error Message -->
           </div>
         </div>
       </div>

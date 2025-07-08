@@ -29,7 +29,8 @@
               <div class="mb-3">
                 <label for="" class="form-label">Description</label>
                 <textarea name="description" class="form-control">
-<%= category.description %></textarea>
+<%= category.description %></textarea
+                >
               </div>
               <input
                 type="submit"
@@ -40,6 +41,10 @@
               />
             </form>
             <!-- /Form End -->
+
+            <!-- Error Message -->
+            <%- include('../partials/error') %>
+            <!-- /Error Message -->
           </div>
         </div>
       </div>

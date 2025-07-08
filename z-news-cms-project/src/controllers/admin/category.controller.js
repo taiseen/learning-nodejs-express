@@ -1,5 +1,6 @@
 import CategoryModel from "../../models/category.model.js";
 import createError from "../../utils/createError.js";
+import { validationResult } from 'express-validator';
 
 
 
@@ -30,6 +31,15 @@ const addCategoryPage = (req, res) => {
 
 const addCategory = async (req, res, next) => {
 
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.render('admin/categories/create', {
+            role: req.role,
+            errors: errors.array()
+        })
+    }
+
+
     const { name, description } = req.body;
 
     try {
@@ -57,7 +67,7 @@ const updateCategoryPage = async (req, res, next) => {
             return next(createError(404, 'Category'));
         }
 
-        res.render('admin/categories/update', { category, role: req.role });
+        res.render('admin/categories/update', { category, role: req.role, errors: 0 });
 
     } catch (error) {
         next(error);
@@ -70,6 +80,19 @@ const updateCategoryPage = async (req, res, next) => {
 const updateCategory = async (req, res, next) => {
 
     const id = req.params.id;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+
+        const category = await CategoryModel.findById(id)
+
+        return res.render('admin/categories/update', {
+            category,
+            role: req.role,
+            errors: errors.array()
+        })
+    }
+
 
     try {
 

@@ -29,12 +29,7 @@
                 <form action="/admin/index" method="POST">
                   <div class="mb-3">
                     <label class="form-label">Username</label>
-                    <input
-                      class="form-control"
-                      name="username"
-                      type="text"
-                      required
-                    />
+                    <input class="form-control" name="username" type="text" />
                   </div>
 
                   <div class="mb-3">
@@ -51,6 +46,10 @@
                     <button type="submit" class="btn btn-primary">Login</button>
                   </div>
                 </form>
+
+                <!-- Error Message -->
+                <%- include('partials/error') %>
+                <!-- /Error Message -->
               </div>
             </div>
           </div>

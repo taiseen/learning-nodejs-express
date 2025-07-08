@@ -1,3 +1,4 @@
+import { validationResult } from 'express-validator';
 import CategoryModel from "../../models/category.model.js";
 import SettingModel from "../../models/setting.model.js";
 import createError from "../../utils/createError.js";
@@ -10,29 +11,42 @@ import bcrypt from 'bcryptjs';
 
 
 const loginPage = (_, res) => {
-    res.render('admin/login', { layout: false });
+    res.render('admin/login', { layout: false, errors: 0 });
 }
 
 
 
 const adminLogin = async (req, res, next) => {
 
-    const { username, password } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.render('admin/login', {
+            layout: false,
+            errors: errors.array()
+        })
+    }
 
-    if (!username || !password) {
-        return res.status(400).json({ message: 'All fields are required.' })
-    };
+    const { username, password } = req.body;
 
     try {
 
         const user = await UserModel.findOne({ username });
         if (!user) {
-            return next(createError(401, 'Invalid username & password.'));
+            // return next(createError(401, 'Invalid username & password.'));
+
+            return res.render('admin/login', {
+                layout: false,
+                errors: [{ msg: 'Invalid username & password.' }],
+            });
         }
 
         const isCorrectPassword = await bcrypt.compare(password, user.password);
         if (!isCorrectPassword) {
-            return next(createError(401, 'Invalid username & password.'));
+            // return next(createError(401, 'Invalid username & password.'));
+            return res.render('admin/login', {
+                layout: false,
+                errors: [{ msg: 'Invalid username & password...' }],
+            });
         }
 
         const { _id: id, role, fullname } = user;
@@ -164,12 +178,21 @@ const allUser = async (req, res, next) => {
 
 const addUserPage = (req, res) => {
     // just page render...
-    res.render('admin/users/create', { role: req.role });
+    res.render('admin/users/create', { role: req.role, errors: 0 });
 }
 
 
 
 const addUser = async (req, res, next) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.render('admin/users/create', {
+            role: req.role,
+            errors: errors.array()
+        })
+    }
+
 
     try {
 
@@ -196,7 +219,7 @@ const updateUserPage = async (req, res, next) => {
             return next(createError(404, 'User'));
         }
 
-        res.render('admin/users/update', { user, role: req.role });
+        res.render('admin/users/update', { user, role: req.role, errors: 0 });
 
     } catch (error) {
         next(error);
@@ -208,6 +231,16 @@ const updateUserPage = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
 
     const id = req.params.id;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.render('admin/users/update', {
+            user: req.body, // populate by old data
+            role: req.role,
+            errors: errors.array()
+        })
+    }
+
 
     const { fullname, role, password } = req.body;
 

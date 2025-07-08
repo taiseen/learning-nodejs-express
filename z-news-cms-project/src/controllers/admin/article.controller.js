@@ -1,3 +1,4 @@
+import { validationResult } from 'express-validator';
 import CategoryModel from "../../models/category.model.js";
 import createError from "../../utils/createError.js";
 import NewsModel from "../../models/news.model.js";
@@ -33,12 +34,25 @@ const addArticlePage = async (req, res) => {
     const categories = await CategoryModel.find();
 
     // view folder hierarchy
-    res.render('admin/articles/create', { categories, role: req.role });
+    res.render('admin/articles/create', { categories, role: req.role, errors: 0 });
 
 }
 
 
 const addArticle = async (req, res, next) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+
+        const categories = await CategoryModel.find();
+
+        return res.render('admin/articles/create', {
+            categories,
+            role: req.role,
+            errors: errors.array()
+        })
+    }
+
 
     const { title, content, category } = req.body;
     const image = req.file.filename;
@@ -63,15 +77,11 @@ const updateArticlePage = async (req, res, next) => {
 
     const id = req.params.id;
 
-    console.log({ id });
-
     try {
 
         const article = await NewsModel.findById(id)
             .populate('category', 'name')
             .populate('author', 'fullname');
-
-        console.log(article);
 
         if (!article) {
             return next(createError(404, 'Article'));
@@ -86,7 +96,7 @@ const updateArticlePage = async (req, res, next) => {
 
         const categories = await CategoryModel.find();
 
-        res.render('admin/articles/update', { article, categories, role: req.role });
+        res.render('admin/articles/update', { article, categories, role: req.role, errors: 0 });
 
     } catch (error) {
         next(error);
@@ -100,6 +110,19 @@ const updateArticle = async (req, res, next) => {
     const { title, content, category } = req.body;
     const id = req.params.id;
     const image = req.file?.filename;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+
+        const categories = await CategoryModel.find();
+
+        return res.render('admin/articles/update', {
+            article: req.body, // populate by old data
+            categories,
+            role: req.role,
+            errors: errors.array()
+        })
+    }
 
     try {
 
