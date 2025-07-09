@@ -1,5 +1,6 @@
 import CategoryModel from "../../models/category.model.js";
 import createError from "../../utils/createError.js";
+import NewsModel from "../../models/news.model.js";
 import { validationResult } from 'express-validator';
 
 
@@ -116,11 +117,22 @@ const deleteCategory = async (req, res, next) => {
 
     try {
 
-        const category = await CategoryModel.findByIdAndDelete(id);
+        const category = await CategoryModel.findById(id);
 
         if (!category) {
             return next(createError(404, 'Category'));
         }
+
+        const article = await NewsModel.findOne({ category: id });
+        if (article) {
+            return res.status(400)
+                .json({
+                    success: false,
+                    message: 'This category is associated with an article'
+                });
+        }
+
+        await category.deleteOne();
 
         res.json({ success: true });
 
