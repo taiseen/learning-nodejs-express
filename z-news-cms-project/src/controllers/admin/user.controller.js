@@ -7,7 +7,8 @@ import UserModel from "../../models/user.model.js";
 import config from "../../config/index.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-
+import path from 'path';
+import fs from 'fs';
 
 
 const loginPage = (_, res) => {
@@ -140,7 +141,7 @@ const saveSettings = async (req, res, next) => {
         if (website_logo) {
             if (setting.website_logo) {
                 const folderPath = path.join(process.cwd(), 'public', 'uploads');
-                const imagePath = path.join(folderPath, article.image);
+                const imagePath = path.join(folderPath, setting.website_logo);
 
                 if (fs.existsSync(imagePath)) {
                     fs.unlinkSync(imagePath);
