@@ -140,6 +140,7 @@ const saveSettings = async (req, res, next) => {
 
         if (website_logo) {
             if (setting.website_logo) {
+                // 1st, if img present, then delete old image...
                 const folderPath = path.join(process.cwd(), 'public', 'uploads');
                 const imagePath = path.join(folderPath, setting.website_logo);
 
@@ -147,7 +148,8 @@ const saveSettings = async (req, res, next) => {
                     fs.unlinkSync(imagePath);
                 }
             }
-
+            
+            // 2nd, save new image...
             setting.website_logo = website_logo;
         }
 

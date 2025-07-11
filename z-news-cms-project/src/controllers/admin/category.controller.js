@@ -97,11 +97,16 @@ const updateCategory = async (req, res, next) => {
 
     try {
 
-        const category = await CategoryModel.findByIdAndUpdate(id, req.body, { new: true });
-
+        const category = await CategoryModel.findById(id);
         if (!category) {
             return next(createError(404, 'Category'));
         }
+
+        category.name = req.body.name ?? category.name;
+        category.description = req.body.description ?? category.description;
+
+        // for auto slug update, need this kind of codding pattern for data save...
+        await category.save();
 
         res.redirect('/admin/category',); // html link address...
     } catch (error) {
