@@ -46,3 +46,8 @@ app.listen(PORT, () => {
     dbConnection();
     console.log(`Server running :- http://localhost:${PORT}`);
 });
+
+
+// You have been signed out
+// You’ve been signed out of the AWS console. 
+// AWS sessions in all tabs have been signed out.

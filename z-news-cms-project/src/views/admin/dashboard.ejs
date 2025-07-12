@@ -6,7 +6,7 @@
           <i class="fa fa-cubes"></i>Dashboard |
           <small>Hello <%= fullname %> </small>
         </h1>
-        
+
         <% const userRole = role === 'admin' ? 'Admin🛡️' : 'Author📝' %>
         <p class="lead">Role: <%= userRole %></p>
       </div>
@@ -19,6 +19,7 @@
         </div>
       </div>
 
+      <% if(role === 'admin') { %>
       <div class="col-md-3">
         <div class="admin-block">
           <i class="fa fa-gears"></i>
@@ -27,7 +28,6 @@
         </div>
       </div>
 
-      <% if(role === 'admin') { %>
       <div class="col-md-3">
         <div class="admin-block" style="background-color: #d2f4ea">
           <i class="fa fa-users"></i>

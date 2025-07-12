@@ -10,11 +10,11 @@
     any other head content must come *after* these tags -->
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <!-- Font Awesome Icon -->
-    <link rel="stylesheet" href="css/font-awesome.css" />
+    <link rel="stylesheet" href="/css/font-awesome.css" />
     <!-- Custom stylesheet -->
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
 
     <title>News</title>
   </head>
@@ -27,7 +27,7 @@
         <div class="row justify-content-center">
           <!-- LOGO -->
           <div class="col-md-3">
-            <a href="/index.html" id="logo">
+            <a href="/" id="logo">
               <img src="/images/news.jpg" alt="Logo" />
             </a>
           </div>
@@ -44,11 +44,15 @@
         <div class="row">
           <div class="col-md-12">
             <ul class="menu">
-              <li><a href="index.html">Home</a></li>
-              <li><a href="category.html">Business</a></li>
-              <li><a href="category.html">Entertainment</a></li>
-              <li><a href="category.html">Sports</a></li>
-              <li><a href="category.html">Politics</a></li>
+              <li><a href="/">Home</a></li>
+
+              <% categories.forEach((category) => { %>
+              <li>
+                <a href="/category/<%= category.slug %>">
+                  <%= category.name %>
+                </a>
+              </li>
+              <% }); %>
             </ul>
           </div>
         </div>

@@ -80,8 +80,8 @@ const categoryValidation = [
         .trim()
         .notEmpty()
         .withMessage('Category Name is required')
-        .isLength({ min: 3, max: 18 })
-        .withMessage('Category Name must be 3 to 18 characters long'),
+        .isLength({ min: 2, max: 30 })
+        .withMessage('Category Name must be 3 to 30 characters long'),
 
     body('description')
         .isLength({ max: 200 })
@@ -94,15 +94,15 @@ const articleValidation = [
         .trim()
         .notEmpty()
         .withMessage('Title is required')
-        .isLength({ min: 7, max: 50 })
-        .withMessage('Title must be 7 to 50 characters long'),
+        .isLength({ min: 7, max: 150 })
+        .withMessage('Title must be 7 to 150 characters long'),
 
     body('content')
         .trim()
         .notEmpty()
         .withMessage('Content is required')
-        .isLength({ min: 50, max: 1500 })
-        .withMessage('Content must be 50 to 1500 characters long'),
+        .isLength({ min: 50, max: 10000 })
+        .withMessage('Content must be 50 to 10000 characters long'),
 
     body('category')
         .trim()
