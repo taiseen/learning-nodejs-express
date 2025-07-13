@@ -1,8 +1,12 @@
 import * as clientSite from '../controllers/clientSite.controller.js';
+import loadCommonData from '../middleware/loadCommonData.js';
 import express from 'express';
 
 
 const frontendRoutes = express.Router();
+
+
+frontendRoutes.use(loadCommonData); // use this middleware for all frontend routes...
 
 
 frontendRoutes.get('/', clientSite.index);

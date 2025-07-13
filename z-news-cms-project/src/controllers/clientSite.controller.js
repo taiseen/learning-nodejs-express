@@ -11,13 +11,7 @@ const index = async (_, res) => {
         .populate('author', 'fullname') // join query...
         .sort({ createdAt: -1 });
 
-
-    const categoryUseInArticle = await NewsModel.distinct('category');
-    const categories = await CategoryModel.find({ _id: { $in: categoryUseInArticle } });
-
-    // res.json({ articles, categories });
-
-    res.render('index', { articles, categories });
+    res.render('index', { articles });
 }
 
 
@@ -38,12 +32,7 @@ const articleByCategories = async (req, res) => {
         .populate('author', 'fullname') // join query...
         .sort({ createdAt: -1 });
 
-
-    const categoryUseInArticle = await NewsModel.distinct('category');
-    const categories = await CategoryModel.find({ _id: { $in: categoryUseInArticle } });
-
-
-    res.render('category', { articles, categories, categoryName: category.name });
+    res.render('category', { articles, categoryName: category.name });
 }
 
 
@@ -61,11 +50,7 @@ const singleArticle = async (req, res) => {
 
     if (!singleNews) return res.status(404).send('Article not found');
 
-    const categoryUseInArticle = await NewsModel.distinct('category');
-    const categories = await CategoryModel.find({ _id: { $in: categoryUseInArticle } });
-
-
-    res.render('single', { singleNews, categories });
+    res.render('single', { singleNews });
 }
 
 
@@ -86,12 +71,7 @@ const search = async (req, res) => {
         .populate('author', 'fullname') // join query...
         .sort({ createdAt: -1 });
 
-
-    const categoryUseInArticle = await NewsModel.distinct('category');
-    const categories = await CategoryModel.find({ _id: { $in: categoryUseInArticle } });
-
-
-    res.render('search', { articles: foundedArticles, categories, searchQuery });
+    res.render('search', { articles: foundedArticles, searchQuery });
 }
 
 
@@ -107,14 +87,9 @@ const author = async (req, res) => {
         .populate('author', 'fullname') // join query...
         .sort({ createdAt: -1 });
 
-
-    const categoryUseInArticle = await NewsModel.distinct('category');
-    const categories = await CategoryModel.find({ _id: { $in: categoryUseInArticle } });
-
-
     const authorName = articles[0].author.fullname;
-    
-    res.render('author', { articles, categories, authorName });
+
+    res.render('author', { articles, authorName });
 }
 
 

@@ -24,111 +24,34 @@
   <div class="recent-post-container">
     <h4>Recent Posts</h4>
 
-    <div class="recent-post">
-      <a class="post-img" href="">
-        <img src="images/post-format.jpg" alt="" />
-      </a>
-
-      <div class="post-content">
-        <h5><a href="single.html">Lorem ipsum dolor sit amet</a></h5>
-        <span>
-          <i class="fa fa-tags" aria-hidden="true"></i>
-          <a href="category.html">Html</a>
-        </span>
-
-        <span>
-          <i class="fa fa-calendar" aria-hidden="true"></i>
-          01 Nov, 2025
-        </span>
-        <a class="read-more" href="single.html">read more</a>
+    <% latestArticles.forEach(news => { %> 
+    <% const { _id, title, content, image, author, category, createdAt } = news %>
+    
+      <div class="recent-post">
+        <a class="post-img" href="/single/<%= _id %>">
+          <img src="/uploads/<%= image %>" alt="<%= title %>" />
+        </a>
+  
+        <div class="post-content">
+          <h5>
+            <a href="/single/<%= _id %>"><%= title %></a>
+          </h5>
+          
+          <span>
+            <i class="fa fa-tags" aria-hidden="true"></i>
+            <a href="/category/<%= category.slug %>"><%= category.name %></a>
+          </span>
+  
+          <span>
+            <i class="fa fa-calendar" aria-hidden="true"></i>
+            <%= new Date(createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) %>
+          </span>
+          
+          <a class="read-more" href="/single/<%= _id %>">read more</a>
+        </div>
       </div>
-    </div>
-
-    <div class="recent-post">
-      <a class="post-img" href="">
-        <img src="images/post_1.jpg" alt="" />
-      </a>
-
-      <div class="post-content">
-        <h5><a href="single.html">Lorem ipsum dolor sit amet</a></h5>
-
-        <span>
-          <i class="fa fa-tags" aria-hidden="true"></i>
-          <a href="category.html">Html</a>
-        </span>
-
-        <span>
-          <i class="fa fa-calendar" aria-hidden="true"></i>
-          01 Nov, 2025
-        </span>
-        <a class="read-more" href="single.html">read more</a>
-      </div>
-    </div>
-
-    <div class="recent-post">
-      <a class="post-img" href="">
-        <img src="images/post-format.jpg" alt="" />
-      </a>
-
-      <div class="post-content">
-        <h5><a href="single.html">Lorem ipsum dolor sit amet</a></h5>
-
-        <span>
-          <i class="fa fa-tags" aria-hidden="true"></i>
-          <a href="category.html">Html</a>
-        </span>
-        <span>
-          <i class="fa fa-calendar" aria-hidden="true"></i>
-          01 Nov, 2025
-        </span>
-
-        <a class="read-more" href="single.html">read more</a>
-      </div>
-    </div>
-
-    <div class="recent-post">
-      <a class="post-img" href="">
-        <img src="images/post_1.jpg" alt="" />
-      </a>
-
-      <div class="post-content">
-        <h5><a href="single.html">Lorem ipsum dolor sit amet</a></h5>
-
-        <span>
-          <i class="fa fa-tags" aria-hidden="true"></i>
-          <a href="category.html">Html</a>
-        </span>
-
-        <span>
-          <i class="fa fa-calendar" aria-hidden="true"></i>
-          01 Nov, 2025
-        </span>
-
-        <a class="read-more" href="single.html">read more</a>
-      </div>
-    </div>
-
-    <div class="recent-post">
-      <a class="post-img" href="">
-        <img src="images/post-format.jpg" alt="" />
-      </a>
-
-      <div class="post-content">
-        <h5><a href="single.html">Lorem ipsum dolor sit amet</a></h5>
-
-        <span>
-          <i class="fa fa-tags" aria-hidden="true"></i>
-          <a href="category.html">Html</a>
-        </span>
-
-        <span>
-          <i class="fa fa-calendar" aria-hidden="true"></i>
-          01 Nov, 2025
-        </span>
-
-        <a class="read-more" href="single.html">read more</a>
-      </div>
-    </div>
+    <% }) %>
+    
   </div>
   <!-- /recent posts box -->
 </div>
