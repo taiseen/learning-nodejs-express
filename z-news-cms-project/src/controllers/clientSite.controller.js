@@ -1,17 +1,32 @@
 import CategoryModel from "../models/category.model.js";
 import NewsModel from "../models/news.model.js";
+import paginate from "../utils/paginate.js";
 
 
 
-const index = async (_, res) => {
+const index = async (req, res) => {
 
-    const articles = await NewsModel
-        .find()
-        .populate('category', { name: 1, slug: 1 }) // join query...
-        .populate('author', 'fullname') // join query...
-        .sort({ createdAt: -1 });
+    // const articles = await NewsModel
+    //     .find()
+    //     .populate('category', { name: 1, slug: 1 }) // join query...
+    //     .populate('author', 'fullname') // join query...
+    //     .sort({ createdAt: -1 });
 
-    res.render('index', { articles });
+    const paginatedArticles = await paginate(
+        NewsModel,
+        {},
+        req.query,
+        {
+            sort: '-createdAt',
+            populate: [
+                { path: 'category', select: 'name slug' }, // join query...
+                { path: 'author', select: 'fullname' } // join query...
+            ]
+        }
+    );
+
+    // res.json({ paginatedArticles });
+    res.render('index', { paginatedArticles, query: req.query });
 }
 
 
@@ -26,13 +41,20 @@ const articleByCategories = async (req, res) => {
         return res.status(404).send('Category not found');
     }
 
-    const articles = await NewsModel
-        .find({ category: category._id })
-        .populate('category', { name: 1, slug: 1 }) // join query...
-        .populate('author', 'fullname') // join query...
-        .sort({ createdAt: -1 });
+    const paginatedArticles = await paginate(
+        NewsModel,
+        { category: category._id },
+        req.query,
+        {
+            sort: '-createdAt',
+            populate: [
+                { path: 'category', select: 'name slug' },
+                { path: 'author', select: 'fullname' }
+            ]
+        }
+    );
 
-    res.render('category', { articles, categoryName: category.name });
+    res.render('category', { paginatedArticles, categoryName: category.name, query: req.query });
 }
 
 
@@ -60,18 +82,36 @@ const search = async (req, res) => {
 
     const searchQuery = req.query.search || '';
 
-    const foundedArticles = await NewsModel
-        .find({
+    // const foundedArticles = await NewsModel
+    //     .find({
+    //         $or: [
+    //             { title: { $regex: searchQuery, $options: 'i' } },
+    //             { content: { $regex: searchQuery, $options: 'i' } }
+    //         ]
+    //     })
+    //     .populate('category', { name: 1, slug: 1 }) // join query...
+    //     .populate('author', 'fullname') // join query...
+    //     .sort({ createdAt: -1 });
+
+    const paginatedArticles = await paginate(
+        NewsModel,
+        {
             $or: [
                 { title: { $regex: searchQuery, $options: 'i' } },
                 { content: { $regex: searchQuery, $options: 'i' } }
             ]
-        })
-        .populate('category', { name: 1, slug: 1 }) // join query...
-        .populate('author', 'fullname') // join query...
-        .sort({ createdAt: -1 });
+        },
+        req.query,
+        {
+            sort: '-createdAt',
+            populate: [
+                { path: 'category', select: 'name slug' },
+                { path: 'author', select: 'fullname' }
+            ]
+        }
+    );
 
-    res.render('search', { articles: foundedArticles, searchQuery });
+    res.render('search', { paginatedArticles, searchQuery, query: req.query });
 }
 
 
@@ -81,15 +121,25 @@ const author = async (req, res) => {
 
     const authorId = req.params.name;
 
-    const articles = await NewsModel
-        .find({ author: authorId })
-        .populate('category', { name: 1, slug: 1 }) // join query...
-        .populate('author', 'fullname') // join query...
-        .sort({ createdAt: -1 });
+    const author = await NewsModel.findOne({ author: authorId });
+    if (!author) return res.status(404).send('Author not found');
 
-    const authorName = articles[0].author.fullname;
+    const paginatedArticles = await paginate(
+        NewsModel,
+        { author: authorId },
+        req.query,
+        {
+            sort: '-createdAt',
+            populate: [
+                { path: 'category', select: 'name slug' },
+                { path: 'author', select: 'fullname' }
+            ]
+        }
+    );
 
-    res.render('author', { articles, authorName });
+    const authorName = paginatedArticles.data[0].author.fullname;
+
+    res.render('author', { paginatedArticles, authorName, query: req.query });
 }
 
 
