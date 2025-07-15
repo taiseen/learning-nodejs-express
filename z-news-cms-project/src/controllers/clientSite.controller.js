@@ -1,4 +1,6 @@
 import CategoryModel from "../models/category.model.js";
+import CommentModel from "../models/comment.model.js";
+import createError from "../utils/createError.js";
 import NewsModel from "../models/news.model.js";
 import paginate from "../utils/paginate.js";
 
@@ -62,7 +64,7 @@ const articleByCategories = async (req, res) => {
 
 const singleArticle = async (req, res) => {
 
-    const articleId = req.params.id;
+    const articleId = req.params.id; // come from url
 
     const singleNews = await NewsModel
         .findById(articleId)
@@ -70,9 +72,13 @@ const singleArticle = async (req, res) => {
         .populate('author', 'fullname') // join query...
         .sort({ createdAt: -1 });
 
-    if (!singleNews) return res.status(404).send('Article not found');
+    if (!singleNews) return next(createError(404, 'Article'));
 
-    res.render('single', { singleNews });
+    const comments = await CommentModel
+        .find({ article: articleId, status: 'approved' })
+        .sort({ createdAt: -1 });
+
+    res.render('single', { singleNews, comments });
 }
 
 
@@ -145,8 +151,34 @@ const author = async (req, res) => {
 
 
 
-const addComment = async (req, res) => {
+const addComment = async (req, res, next) => {
 
+    const articleId = req.params.id; // come from url
+
+    const { name, email, content } = req.body; // come from user input form
+
+    try {
+
+        const article = await NewsModel.findById(articleId);
+
+        if (!article) {
+            return next(createError(404, 'Article'));
+        }
+
+        const newComment = await CommentModel({
+            name,
+            email,
+            content,
+            article: articleId
+        });
+
+        await newComment.save();
+
+        res.redirect(`/single/${articleId}`);
+
+    } catch (error) {
+        next(error);
+    }
 }
 
 
