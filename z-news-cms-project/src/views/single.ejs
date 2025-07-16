@@ -1,5 +1,6 @@
 <div class="post-container">
-  <% const { _id, title, content, image, author, category, createdAt } = singleNews; %>
+  <% const { _id, title, content, image, author, category, createdAt } =
+  singleNews; %>
 
   <div class="post-content single-post">
     <h3><%= title %></h3>
@@ -45,12 +46,12 @@
           <label class="form-label">Name</label>
           <input type="text" class="form-control" name="name" required />
         </div>
-        
+
         <div class="mb-3">
           <label class="form-label">Email</label>
           <input type="email" class="form-control" name="email" required />
         </div>
-        
+
         <div class="mb-3">
           <label class="form-label">Comment</label>
           <textarea
@@ -60,7 +61,7 @@
             required
           ></textarea>
         </div>
-        
+
         <button type="submit" class="btn btn-primary">Submit Comment</button>
       </form>
     </div>
@@ -68,20 +69,20 @@
 
   <!-- Display Comments -->
   <div class="comments-list">
-    <div class="card mb-3">
-    
-    <% comments.forEach(comment => { %>
-    
+    <% comments.forEach(comment => { %> 
     <% const { name, email, content, createdAt } = comment; %>
-      
+    <div class="card mb-3">
       <div class="card-body">
         <h6 class="card-subtitle mb-2 text-muted"><%= name %></h6>
+        
         <p class="card-text"><%= content %></p>
-        <small class="text-muted">Posted on <%= new Date(createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) %></small>
+        
+        <small class="text-muted"
+          >Posted on <%= new Date(createdAt).toLocaleDateString('en-GB', { day:
+          '2-digit', month: 'long', year: 'numeric' }) %></small
+        >
       </div>
-      
-    <% }) %>
-    
     </div>
+    <% }) %>
   </div>
 </div>

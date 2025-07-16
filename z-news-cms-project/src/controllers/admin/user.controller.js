@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator';
 import CategoryModel from "../../models/category.model.js";
+import CommentModel from '../../models/comment.model.js';
 import SettingModel from "../../models/setting.model.js";
 import createError from "../../utils/createError.js";
 import NewsModel from "../../models/news.model.js";
@@ -9,6 +10,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import path from 'path';
 import fs from 'fs';
+
 
 
 const loginPage = (_, res) => {
@@ -84,6 +86,7 @@ const dashboardPage = async (req, res, next) => {
     try {
 
         const categoryCount = await CategoryModel.countDocuments();
+        const commentCount = await CommentModel.countDocuments();
         const userCount = await UserModel.countDocuments();
 
         // show login user, owen article count number...
@@ -95,6 +98,7 @@ const dashboardPage = async (req, res, next) => {
             fullname: req.fullname,
             role: req.role,
             categoryCount,
+            commentCount,
             articleCount,
             userCount,
         });
@@ -148,7 +152,7 @@ const saveSettings = async (req, res, next) => {
                     fs.unlinkSync(imagePath);
                 }
             }
-            
+
             // 2nd, save new image...
             setting.website_logo = website_logo;
         }

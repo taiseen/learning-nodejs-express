@@ -49,6 +49,8 @@ adminRoutes.delete('/delete-article/:id', isLogIn, articleController.deleteArtic
 
 // 🟩🟩🟩 Comment Routes
 adminRoutes.get('/comments', isLogIn, commentController.allComments);
+adminRoutes.put('/update-comment-status/:id', isLogIn, commentController.updateCommentStatus);
+adminRoutes.delete('/delete-comment/:id', isLogIn, commentController.deleteComment);
 
 
 
