@@ -6,6 +6,7 @@ import createError from "../../utils/createError.js";
 import NewsModel from "../../models/news.model.js";
 import UserModel from "../../models/user.model.js";
 import config from "../../config/index.js";
+import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import path from 'path';
@@ -83,24 +84,131 @@ const logout = (_, res) => {
 
 const dashboardPage = async (req, res, next) => {
 
-    try {
+    // Utility function to convert string ID to ObjectId
+    const toObjectId = (id) => new mongoose.Types.ObjectId(id);
 
+    const userId = req.id;
+    const userRole = req.role;
+
+    try {
+        // Base query conditions based on role
+        const roleBaseQuery = userRole === 'author' ? { author: toObjectId(userId) } : {};
+
+        const articleCount = await NewsModel.countDocuments(roleBaseQuery);
         const categoryCount = await CategoryModel.countDocuments();
-        const commentCount = await CommentModel.countDocuments();
         const userCount = await UserModel.countDocuments();
 
-        // show login user, owen article count number...
-        const articleCount = req.role === 'author'
-            ? await NewsModel.countDocuments({ author: req.id })
-            : await NewsModel.countDocuments();
+        // For comments, we need to handle author filtering differently
+        // since comments are linked to articles, not directly to authors
+        let commentCount;
+        let commentStatusCounts;
+
+        if (userRole === 'author') {
+            // For authors, get comments on their articles only
+            const authorArticles = await NewsModel.find({ author: toObjectId(userId) }).select('_id');
+            const articleIds = authorArticles.map(article => article._id);
+
+            commentCount = await CommentModel.countDocuments({
+                article: { $in: articleIds }
+            });
+
+            // Get comment status counts for author's articles
+            commentStatusCounts = await CommentModel.aggregate([
+                {
+                    $match: { article: { $in: articleIds } }
+                },
+                {
+                    $group: {
+                        _id: "$status",
+                        count: { $sum: 1 }
+                    }
+                }
+            ]);
+        } else {
+            // For admins, get all comments
+            commentCount = await CommentModel.countDocuments();
+
+            commentStatusCounts = await CommentModel.aggregate([
+                {
+                    $group: {
+                        _id: "$status",
+                        count: { $sum: 1 }
+                    }
+                }
+            ]);
+        }
+
+        // Get category-wise article counts with proper filtering
+        let categoryStatsForChart = [];
+
+        if (articleCount > 0) {
+            // Attempt aggregation
+            try {
+                categoryStatsForChart = await NewsModel.aggregate([
+                    {
+                        $match: roleBaseQuery
+                    },
+                    {
+                        $group: {
+                            _id: "$category",
+                            count: { $sum: 1 }
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: "categories",
+                            localField: "_id",
+                            foreignField: "_id",
+                            as: "categoryInfo"
+                        }
+                    },
+                    {
+                        $unwind: {
+                            path: "$categoryInfo",
+                            preserveNullAndEmptyArrays: true // This prevents documents from being removed
+                        }
+                    },
+                    {
+                        $project: {
+                            categoryName: {
+                                $ifNull: ["$categoryInfo.name", "Unknown Category"]
+                            },
+                            count: 1,
+                            percentage: {
+                                $multiply: [
+                                    { $divide: ["$count", articleCount] },
+                                    100
+                                ]
+                            }
+                        }
+                    }
+                ]);
+            } catch (error) {
+                console.log('Aggregation error:', error);
+            }
+        }
+
+        // Transform comment status counts to expected format
+        const statusCounts = {
+            approved: 0,
+            pending: 0,
+            rejected: 0
+        };
+
+        commentStatusCounts.forEach(status => {
+            statusCounts[status._id] = status.count;
+        });
+
 
         res.render('admin/dashboard', {
             fullname: req.fullname,
-            role: req.role,
+            role: userRole,
             categoryCount,
             commentCount,
             articleCount,
             userCount,
+            categoryStatsForChart,
+            commentStatsForChart: statusCounts,
         });
 
     } catch (error) {

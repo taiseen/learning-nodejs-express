@@ -35,6 +35,7 @@
           <h1><%= userCount %></h1>
         </div>
       </div>
+      <% } %>
 
       <div class="col-md-3">
         <div class="admin-block">
@@ -43,7 +44,223 @@
           <h1><%= commentCount %></h1>
         </div>
       </div>
-      <% } %>
+    </div>
+
+    <div style="display: flex; justify-content: space-between">
+      <div style="height: 350px; width: 45%; margin-top: 10px">
+        <h3>Article Categories Stats:</h3>
+        <canvas id="categoryStats"></canvas>
+      </div>
+
+      <div style="height: 350px; width: 45%; margin-top: 10px">
+        <h3>Comment Status:</h3>
+        <canvas id="commentStatusChart"></canvas>
+      </div>
     </div>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const categoryChart = document.getElementById("categoryStats");
+  const categoryStats = <%- JSON.stringify(categoryStatsForChart) %>;
+
+  console.log(categoryStats);
+
+  // Prepare data for chart
+  const labels = categoryStats.map((item) => `${item.categoryName} (${item.count})`);
+  const data = categoryStats.map((item) => item.count); // Using actual counts instead of percentages
+  const backgroundColors = [
+    "rgba(255, 99, 132, 0.7)",
+    "rgba(54, 162, 235, 0.7)",
+    "rgba(255, 206, 86, 0.7)",
+    "rgba(75, 192, 192, 0.7)",
+    "rgba(153, 102, 255, 0.7)",
+    "rgba(255, 159, 64, 0.7)"
+  ];
+
+  new Chart(categoryChart, {
+    type: "pie",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Articles by Category",
+        data: data,
+        backgroundColor: backgroundColors,
+        borderColor: backgroundColors.map(color => color.replace('0.7', '1')),
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right',
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const label = context.label || '';
+              const value = context.raw;
+              const total = data.reduce((a, b) => a + b, 0);
+              const percentage = Math.round((value / total) * 100);
+              return `${label}: ${value} articles (${percentage}%)`;
+            }
+          }
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  // Comment Status Chart
+  const commentCtx = document.getElementById("commentStatusChart");
+  const commentData = <%- JSON.stringify(commentStatsForChart) %>;
+
+  // Prepare data
+  const statusLabels = ["Approved", "Pending", "Rejected"];
+  const statusCounts = [
+    commentData.approved || 0,
+    commentData.pending || 0,
+    commentData.rejected || 0
+  ];
+
+  // Status colors
+  const statusColors = {
+    approved: "rgba(75, 192, 192, 0.7)",
+    pending: "rgba(255, 206, 86, 0.7)",
+    rejected: "rgba(255, 99, 132, 0.7)"
+  };
+
+  new Chart(commentCtx, {
+    type: "bar",
+    data: {
+      labels: statusLabels,
+      datasets: [{
+        label: "Comment Status",
+        data: statusCounts,
+        backgroundColor: [
+          statusColors.approved,
+          statusColors.pending,
+          statusColors.rejected
+        ],
+        borderColor: [
+          statusColors.approved.replace('0.7', '1'),
+          statusColors.pending.replace('0.7', '1'),
+          statusColors.rejected.replace('0.7', '1')
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const label = context.dataset.label || '';
+              const value = context.raw;
+              const total = statusCounts.reduce((a, b) => a + b, 0);
+              const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+              return `${label}: ${value} (${percentage}%)`;
+            }
+          }
+        },
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: "Number of Comments"
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: "Status"
+          }
+        }
+      }
+    }
+  });
+</script>
+
+<!-- <script>
+  const categoryChart = document.getElementById("categoryStats");
+  const categoryStats = (<%- JSON.stringify(categoryStatsForChart) %>);
+
+  // Prepare data for chart
+  const labels = categoryStats.map((item) => item.categoryName);
+  const data = categoryStats.map((item) => item.percentage);
+  const counts = categoryStats.map((item) => item.count);
+
+  new Chart(categoryChart, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Percentage of Articles",
+          data: data,
+          backgroundColor: [
+            "rgba(255, 99, 132, 0.7)",
+            "rgba(54, 162, 235, 0.7)",
+            "rgba(255, 206, 86, 0.7)",
+            "rgba(75, 192, 192, 0.7)",
+            "rgba(153, 102, 255, 0.7)",
+            "rgba(255, 159, 64, 0.7)",
+          ],
+          borderColor: [
+            "rgba(255, 99, 132, 1)",
+            "rgba(54, 162, 235, 1)",
+            "rgba(255, 206, 86, 1)",
+            "rgba(75, 192, 192, 1)",
+            "rgba(153, 102, 255, 1)",
+            "rgba(255, 159, 64, 1)",
+          ],
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              const label = context.dataset.label || "";
+              const value = context.raw;
+              const count = counts[context.dataIndex];
+              return `${label}: ${value.toFixed(2)}% (${count} articles)`;
+            },
+          },
+        },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: "Percentage (%)",
+          },
+          max: 100,
+        },
+        x: {
+          title: {
+            display: true,
+            text: "Categories",
+          },
+        },
+      },
+    },
+  });
+</script> -->

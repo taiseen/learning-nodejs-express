@@ -25,8 +25,8 @@ const userValidation = [
         .trim()
         .notEmpty()
         .withMessage('Fullname is required')
-        .isLength({ min: 5, max: 25 })
-        .withMessage('Fullname must be 5 to 25 characters long'),
+        .isLength({ min: 3, max: 25 })
+        .withMessage('Fullname must be 3 to 25 characters long'),
 
     body('username')
         .trim()
