@@ -34,14 +34,13 @@ const index = async (req, res) => {
 
 
 
-const articleByCategories = async (req, res) => {
+const articleByCategories = async (req, res, next) => {
 
     const slug = req.params.name;
 
     const category = await CategoryModel.findOne({ slug });
-    if (!category) {
-        return res.status(404).send('Category not found');
-    }
+    if (!category) return next(createError(404, 'Category'));
+
 
     const paginatedArticles = await paginate(
         NewsModel,
@@ -62,7 +61,7 @@ const articleByCategories = async (req, res) => {
 
 
 
-const singleArticle = async (req, res) => {
+const singleArticle = async (req, res, next) => {
 
     const articleId = req.params.id; // come from url
 
@@ -123,12 +122,13 @@ const search = async (req, res) => {
 
 
 
-const author = async (req, res) => {
+const author = async (req, res, next) => {
 
     const authorId = req.params.name;
 
     const author = await NewsModel.findOne({ author: authorId });
-    if (!author) return res.status(404).send('Author not found');
+    if (!author) return next(createError(404, 'Author'));
+
 
     const paginatedArticles = await paginate(
         NewsModel,
@@ -177,7 +177,7 @@ const addComment = async (req, res, next) => {
         res.redirect(`/single/${articleId}`);
 
     } catch (error) {
-        next(error);
+        return next(createError(500, 'Error while adding comment.'));
     }
 }
 

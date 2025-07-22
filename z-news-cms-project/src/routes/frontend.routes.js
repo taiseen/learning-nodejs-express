@@ -18,4 +18,32 @@ frontendRoutes.get('/category/:name', clientSite.articleByCategories);
 frontendRoutes.post('/single/:id/comment', clientSite.addComment); // ⬇️⬇️⬇️
 
 
+
+// 🟥🟥🟥 404 Middleware - for Route related error display...
+frontendRoutes.use((_, res) => {
+    res.status(404).render('404', {
+        message: '🔎 Route Not Found...',
+    })
+});
+
+
+
+// 🟥🟥🟥 500 Error Handler - for Server-Coding || DB related error display...
+frontendRoutes.use((error, req, res, next) => {
+
+    console.error('🔴🔴🔴 ' + error.stack);
+
+    const status = error.status || 500;
+
+    const message = error.message.includes('ObjectId failed')
+        ? '🔎 Page Not Found... '
+        : error.message || 'Something went wrong';
+
+    res
+        .status(status)
+        .render('errors', { message, status })
+});
+
+
+
 export default frontendRoutes;

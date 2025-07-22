@@ -29,9 +29,6 @@ app.set('layout', 'layout'); // for frontend layout
 
 
 
-app.use('/', frontendRoutes);
-
-
 app.use('/admin', (req, res, next) => {
     res.locals.layout = 'admin/layout';
     next();
@@ -39,6 +36,7 @@ app.use('/admin', (req, res, next) => {
 
 app.use('/admin', adminRoutes);
 
+app.use('/', frontendRoutes); // set this route after admin routes to avoid conflicts
 
 
 const PORT = process.env.PORT || 3000;
@@ -49,5 +47,5 @@ app.listen(PORT, () => {
 
 
 // You have been signed out
-// You’ve been signed out of the AWS console. 
-// AWS sessions in all tabs have been signed out.
+// You’ve been signed out of the Admin Panel. 
+// Admin sessions in all tabs have been signed out.
