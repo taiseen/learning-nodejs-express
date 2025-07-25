@@ -29,7 +29,7 @@
       alt="<%= title %>"
     />
 
-    <p class="description"><%= content %></p>
+    <p class="description"><%- content %></p>
   </div>
 </div>
 
@@ -75,7 +75,7 @@
       <div class="card-body">
         <h6 class="card-subtitle mb-2 text-muted"><%= name %></h6>
         
-        <p class="card-text"><%= content %></p>
+        <p class="card-text"><%- content %></p>
         
         <small class="text-muted"
           >Posted on <%= new Date(createdAt).toLocaleDateString('en-GB', { day:

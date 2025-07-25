@@ -14,8 +14,8 @@
     <!-- Custom stylesheet -->
     <link rel="stylesheet" href="/css/style.css" />
 
-    <%- typeof tabulatorCSS == 'undefined' ? '' : tabulatorCSS %> 
-    <%- typeof summernoteCSS == 'undefined' ? '' : summernoteCSS %>
+    <%- typeof tabulatorCSS == 'undefined' ? '' : tabulatorCSS %> <%- typeof
+    summernoteCSS == 'undefined' ? '' : summernoteCSS %>
   </head>
 
   <body>
@@ -34,9 +34,20 @@
           <!-- /LOGO -->
 
           <!-- LOG-Out -->
-          <div class="col-md-2">
-            <a href="/admin/logout" class="admin-logout">
-              <i class="fa fa-sign-out"></i> logout
+          <div class="col-md-3 d-flex gap-4 align-items-center">
+            <a
+              href="/"
+              class="d-flex align-items-center gap-2 text-white text-capitalize fs-5"
+              target="_blank"
+            >
+              <i class="fa fa-sitemap text-white"></i> Live-Site
+            </a>
+
+            <a
+              href="/admin/logout"
+              class="d-flex align-items-center gap-2 text-white fs-5"
+            >
+              <i class="fa fa-sign-out text-white"></i> Logout
             </a>
           </div>
           <!-- /LOG-Out -->
