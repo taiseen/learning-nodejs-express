@@ -15,11 +15,11 @@ const __dirname = path.dirname(__filename);
 
 
 // Middlewares...
-app.use(express.json());
-app.use(expressLayouts);
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }));
+app.use(expressLayouts);
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use(express.urlencoded({ extended: false, limit: '10mb' }));
 
 
 // View engine setup
@@ -47,5 +47,5 @@ app.listen(PORT, () => {
 
 
 // You have been signed out
-// You’ve been signed out of the Admin Panel. 
+// You’ve been signed out of the Admin Panel.
 // Admin sessions in all tabs have been signed out.
