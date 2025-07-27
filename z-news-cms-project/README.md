@@ -14,16 +14,19 @@ A comprehensive blog management system with both frontend and admin panel functi
 - 🔐 Authentication system (login, logout)
 - 🗃️ Database connection (MongoDB)
 - 🛡️ Role-based access control
-  - Role wise article - read + update + delete
+  - 👤 Role wise article - read + update + delete
 - 🗂️ CRUD - Category management
 - 📝 CRUD - Article management
 - 👥 CRUD - User management
+- 🚫 Can't delete `Category`, which is used in article
+- 🚫 Can't delete `User`, which is used in article
 
 ### Frontend System
 
 - 📋 Public-facing blog pages
 - 🔓 Admin login interface
 - ✅ Dashboard overview
+  - 📊 Role based info show by Chat
 - 📝 Article management UI
 - 🗂️ Category management UI
 - 👥 User management UI
