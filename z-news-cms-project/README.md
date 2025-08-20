@@ -114,3 +114,9 @@ A comprehensive blog management system with both frontend and admin panel functi
 | Route | Method | Description |
 |-------|--------|-------------|
 | `/admin/comments` | GET | List all comments |
+
+## For Improved Performance:-
+
+- [express-minify-html-terser][link]
+
+[link]: https://www.npmjs.com/package/express-minify-html-terser

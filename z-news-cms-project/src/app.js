@@ -1,11 +1,14 @@
 import frontendRoutes from './routes/frontend.routes.js';
 import dbConnection from './connection/dbConnection.js';
+import minifyHTML from 'express-minify-html-terser';
 import adminRoutes from './routes/admin.routes.js';
 import expressLayouts from 'express-ejs-layouts';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import path from 'path';
 import url from 'url';
+
+
 
 const app = express();
 
@@ -20,6 +23,23 @@ app.use(expressLayouts);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+
+
+// For Improved Performance:-
+// View Page Source to see the difference
+// This will minify the HTML output for all routes
+app.use(minifyHTML({
+    override:                       true,
+    exception_url:                  false,
+    htmlMinifier: {
+        removeComments:             true,
+        collapseWhitespace:         true,
+        collapseBooleanAttributes:  true,
+        removeAttributeQuotes:      true,
+        removeEmptyAttributes:      true,
+        minifyJS:                   true,
+    }
+}));
 
 
 // View engine setup
