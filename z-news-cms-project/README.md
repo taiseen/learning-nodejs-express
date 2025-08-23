@@ -117,6 +117,8 @@ A comprehensive blog management system with both frontend and admin panel functi
 
 ## For Improved Performance:-
 
-- [express-minify-html-terser][link]
+- yarn add [express-minify-html-terser][link1]
+- yarn add [node-cache][link2]
 
-[link]: https://www.npmjs.com/package/express-minify-html-terser
+[link1]: https://www.npmjs.com/package/express-minify-html-terser
+[link2]: https://www.npmjs.com/package/node-cache
