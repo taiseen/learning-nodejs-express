@@ -4,6 +4,7 @@ import minifyHTML from 'express-minify-html-terser';
 import adminRoutes from './routes/admin.routes.js';
 import expressLayouts from 'express-ejs-layouts';
 import cookieParser from 'cookie-parser';
+import compression from 'compression';
 import express from 'express';
 import path from 'path';
 import url from 'url';
@@ -20,9 +21,25 @@ const __dirname = path.dirname(__filename);
 // Middlewares...
 app.use(cookieParser());
 app.use(expressLayouts);
-app.use(express.json({ limit: '10mb' }));
-app.use(express.static(path.join(__dirname, '..', 'public')));
-app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+app.use(express.json({ limit: '10mb' })); // to support JSON-encoded bodies over 10mb
+app.use(express.static(path.join(__dirname, '..', 'public'))); // serve static files from the public directory   
+app.use(express.urlencoded({ extended: false, limit: '10mb' })); // to support URL-encoded bodies over 10mb
+
+app.use(compression({
+    level: 9,
+    threshold: 10 * 1024, // compress all responses over 10kb
+    filter: (req, res) => {
+
+        if (req.headers['x-no-compression']) {
+            // don't compress responses with this request header
+            return false;
+        }
+
+        // fallback to standard filter function
+        return compression.filter(req, res);
+    }
+}));
+
 
 
 // For Improved Performance:-

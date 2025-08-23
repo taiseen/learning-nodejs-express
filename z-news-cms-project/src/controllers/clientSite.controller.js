@@ -184,7 +184,21 @@ const addComment = async (req, res, next) => {
 
 
 
+const testingWebPerformance = async (req, res) => {
+
+    const allNews = await NewsModel.find()
+    
+    res.json(allNews);
+    
+    // res.json({ message: 'Testing cache '.repeat(50000) });
+}
+
+
+
+
+
 export {
+    testingWebPerformance,
     articleByCategories,
     singleArticle,
     addComment,

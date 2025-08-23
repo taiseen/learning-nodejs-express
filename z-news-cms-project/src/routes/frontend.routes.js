@@ -18,6 +18,8 @@ frontendRoutes.get('/category/:name', clientSite.articleByCategories);
 frontendRoutes.post('/single/:id/comment', clientSite.addComment); // ⬇️⬇️⬇️
 
 
+frontendRoutes.get('/json', clientSite.testingWebPerformance);
+
 
 // 🟥🟥🟥 404 Middleware - for Route related error display...
 frontendRoutes.use((_, res) => {
