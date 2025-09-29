@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebSocket | Chat App</title>
+  </head>
+
+  <body class="bg-slate-700 text-white p-5">
+    <h1 class="text-2xl">WebSocket | Chatting App</h1>
+
+    <ul id="messagesContainer" class="mt-5 list-disc ml-6"></ul>
+
+    <form id="myform" action="" class="flex gap-2 mt-5">
+      <div>
+        <label for="input" class="text-lg">Message</label>
+
+        <input
+          type="text"
+          id="input"
+          autocomplete="off"
+          class="px-2 py-1.5 outline-none rounded text-black"
+        />
+      </div>
+
+      <div>
+        <button id="sendBtn" class="px-2 py-1.5 bg-blue-500 rounded">
+          Send
+        </button>
+        <button id="toggleBtn" class="px-2 py-1.5 bg-red-500 rounded">
+          Disconnect
+        </button>
+      </div>
+    </form>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+      // 📝 NOTE:-
+      // auto connection to the server with an ID, when the script is loaded
+      const socket = io();
+
+      const messagesContainer = document.getElementById("messagesContainer");
+      const toggleBtn = document.getElementById("toggleBtn");
+      const sendBtn = document.getElementById("sendBtn");
+      const input = document.getElementById("input");
+
+      sendBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        if (input.value) {
+          // 📝 NOTE:-
+          // When we want to ➡️ send message, from 💻 client --> to --> 🌐 server...
+          // use ==> socket.emit('key', value)
+
+          socket.emit("messageFromClient", input.value.trim());
+          input.value = "";
+        }
+      });
+
+      // 📝 NOTE:-
+      // 📩 receiving/listening for the message from 🌐 server --> to --> 💻 client...
+      // and displaying the message on the DOM
+      socket.on("broadcastFromServer", (dataFromServer) => {
+        console.log(dataFromServer);
+
+        const li = document.createElement("li");
+        li.innerText = dataFromServer;
+        messagesContainer.appendChild(li);
+      });
+
+      // 📝 NOTE:-
+      // disconnecting the client from the server
+      toggleBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        if (socket.connected) {
+          socket.disconnect(); // disconnecting the client from the server
+          toggleBtn.innerText = "Connect";
+          toggleBtn.classList.remove("bg-red-500");
+          toggleBtn.classList.add("bg-green-500");
+        } else {
+          socket.connect(); // reconnecting the client to the server
+          toggleBtn.innerText = "Disconnect";
+          toggleBtn.classList.remove("bg-green-500");
+          toggleBtn.classList.add("bg-red-500");
+        }
+      });
+    </script>
+  </body>
+</html>
